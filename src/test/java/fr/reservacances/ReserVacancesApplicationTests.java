@@ -1,4 +1,4 @@
-package fr.projet.ReserVacances;
+package fr.reservacances;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
