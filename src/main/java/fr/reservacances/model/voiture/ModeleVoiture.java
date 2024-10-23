@@ -22,7 +22,7 @@ public class ModeleVoiture {
     @Column(nullable = false)
     private String nom;
 
-    @Column(nullable = false)
+    @Column(name = "nb_place", nullable = false)
     private int nbPlace; 
 
     @Column(nullable = true)

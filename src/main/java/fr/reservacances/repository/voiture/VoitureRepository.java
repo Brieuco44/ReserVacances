@@ -1,4 +1,4 @@
-package fr.reservacances.repository;
+package fr.reservacances.repository.voiture;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

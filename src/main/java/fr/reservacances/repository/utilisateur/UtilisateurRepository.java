@@ -1,4 +1,4 @@
-package fr.reservacances.repository;
+package fr.reservacances.repository.utilisateur;
 
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.jpa.repository.JpaRepository;

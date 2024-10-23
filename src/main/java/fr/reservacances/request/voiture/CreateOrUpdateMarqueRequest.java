@@ -1,4 +1,4 @@
-package fr.reservacances.request;
+package fr.reservacances.request.voiture;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -7,13 +7,10 @@ import lombok.Setter;
 
 @Getter @Setter
 @Builder 
-public class CreateOrUpdateVoiture {
-    
-    @NotBlank
-    private double prix;
+public class CreateOrUpdateMarqueRequest {
 
     @NotBlank
-    private String modeleVoitureId;
+    private String nom;
 
     @NotBlank
     private String villeId;
