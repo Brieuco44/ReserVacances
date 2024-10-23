@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import fr.reservacances.model.utilisateur.Utilisateur;
-import fr.reservacances.repository.UtilisateurRepository;
+import fr.reservacances.repository.utilisateur.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

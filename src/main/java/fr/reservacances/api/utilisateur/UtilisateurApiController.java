@@ -1,12 +1,12 @@
-package fr.reservacances.api;
+package fr.reservacances.api.utilisateur;
 
 
 import fr.reservacances.config.JwtUtil;
 import fr.reservacances.model.utilisateur.Role;
 import fr.reservacances.model.utilisateur.Utilisateur;
-import fr.reservacances.repository.UtilisateurRepository;
-import fr.reservacances.request.AuthRequest;
-import fr.reservacances.request.SubscribeRequest;
+import fr.reservacances.repository.utilisateur.UtilisateurRepository;
+import fr.reservacances.request.utilisateur.AuthRequest;
+import fr.reservacances.request.utilisateur.SubscribeRequest;
 import fr.reservacances.response.UtilisateurResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
