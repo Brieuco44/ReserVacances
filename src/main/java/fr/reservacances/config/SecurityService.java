@@ -1,4 +1,4 @@
-package fr.reservacances.security;
+package fr.reservacances.config;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;

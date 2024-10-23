@@ -28,7 +28,7 @@ public class Voiture {
     private ModeleVoiture modeleVoiture;
 
     @ManyToOne
-    @JoinColumn(name = "modele_id", nullable = false)
+    @JoinColumn(name = "ville_id", nullable = false)
     private Ville ville;
 
 }

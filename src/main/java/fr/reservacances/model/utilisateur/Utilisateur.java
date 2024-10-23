@@ -32,6 +32,9 @@ public class Utilisateur {
     private String telephone;
 
     @Column(nullable = false)
+    private String username;
+
+    @Column(nullable = false)
     private String motDePasse;
 
     @ManyToOne
