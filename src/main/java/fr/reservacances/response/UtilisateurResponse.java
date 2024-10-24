@@ -4,12 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter @Setter
 @Builder
 public class UtilisateurResponse {
-    private String id;
-    private String username;
+    private boolean success;
+    private String token;
 
 }
