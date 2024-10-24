@@ -2,6 +2,7 @@ package fr.reservacances.api.localisation;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class PaysApiController {
     private final PaysRepository paysRepository;
 
     @PostMapping()
+    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.CREATED)
     public String createPays(@Valid @RequestBody CreateOrUpdatePaysRequest request) {
         Pays pays = new Pays();

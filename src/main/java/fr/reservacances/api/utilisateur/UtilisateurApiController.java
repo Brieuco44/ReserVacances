@@ -1,14 +1,6 @@
 package fr.reservacances.api.utilisateur;
 
 
-import fr.reservacances.config.JwtUtil;
-import fr.reservacances.model.utilisateur.Role;
-import fr.reservacances.model.utilisateur.Utilisateur;
-import fr.reservacances.repository.utilisateur.UtilisateurRepository;
-import fr.reservacances.request.utilisateur.AuthRequest;
-import fr.reservacances.request.utilisateur.SubscribeRequest;
-import fr.reservacances.response.UtilisateurResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,13 +9,28 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import fr.reservacances.config.JwtUtil;
+import fr.reservacances.exception.UtilisateurNotFoundException;
+import fr.reservacances.model.utilisateur.Role;
+import fr.reservacances.model.utilisateur.Utilisateur;
+import fr.reservacances.repository.utilisateur.UtilisateurRepository;
+import fr.reservacances.request.utilisateur.AuthRequest;
+import fr.reservacances.request.utilisateur.SubscribeRequest;
+import fr.reservacances.response.UtilisateurResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @RestController
 @RequestMapping("/api/utilisateur")
 @RequiredArgsConstructor
+@Log4j2
 public class UtilisateurApiController {
 
     private final UtilisateurRepository repository;
@@ -31,7 +38,7 @@ public class UtilisateurApiController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/auth")
-    public String auth(@RequestBody AuthRequest request) {
+    public UtilisateurResponse auth(@Valid @RequestBody AuthRequest request) {
         try {
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
@@ -40,20 +47,23 @@ public class UtilisateurApiController {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            Optional<Utilisateur> identifiant = this.repository.findByUsername(request.getUsername());
+            // Optional<Utilisateur> identifiant = this.repository.findByUsername(request.getUsername());
+            String token = JwtUtil.generate(this.repository.findByUsername(request.getUsername()).orElseThrow(UtilisateurNotFoundException::new));
 
-            String id = "";
-            if (identifiant.isEmpty()) {
-                id = "";
-            }else {
-                id = identifiant.get().getId();
-            }
+            log.debug("Token *** généré!");
 
-            return JwtUtil.generate(request.getUsername(), id);
+         return UtilisateurResponse.builder()
+                .success(true)
+                .token(token)
+                .build()
+            ;
         }
 
         catch (BadCredentialsException e) {
-            return "";
+            return UtilisateurResponse.builder()
+                .success(false)
+                .build()
+            ;
         }
     }
 

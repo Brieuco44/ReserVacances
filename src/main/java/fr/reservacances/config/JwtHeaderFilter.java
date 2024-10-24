@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import fr.reservacances.constant.constant;
 import fr.reservacances.model.utilisateur.Utilisateur;
 import fr.reservacances.repository.utilisateur.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,29 +26,30 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 @RequiredArgsConstructor
 public class JwtHeaderFilter extends OncePerRequestFilter {
-    private final UtilisateurRepository repository;
+    private final UtilisateurRepository utilisateurRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = this.getToken(request);
+        Jwt jwt = JwtUtil.parse(token);
 
-        if (token != null && JwtUtil.isValid(token)) {
-            List<GrantedAuthority> authorities = new ArrayList<>();
+        if (jwt.isValid()) {
+            Optional<Utilisateur> optUser = this.utilisateurRepository.findById(jwt.getUtilisateurId());
+            
+            if (optUser.isPresent()) {
+                List<GrantedAuthority> authorities = new ArrayList<>();
+                
 
-            String toksave = JwtUtil.getIdentifiant(token);
-            Optional<Utilisateur> user = repository.findById(toksave);
-
-            if (user.isPresent()) {
-                String role = String.valueOf(user.get().getRole());
-
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+                if (optUser.get().getRole().getNom()==constant.ROLE_ADMIN) {
+                    authorities.add(new SimpleGrantedAuthority(constant.ROLE_ADMIN));
+                }
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        toksave,
-                        null,
-                        authorities
+                    jwt.getUtilisateurId(),
+                    null,
+                    authorities
                 );
-
+    
                 // On ajoute l'authentification au contexte de Sécurité de Spring Security
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
@@ -68,3 +70,4 @@ public class JwtHeaderFilter extends OncePerRequestFilter {
         return authHeader.substring(7);
     }
 }
+
