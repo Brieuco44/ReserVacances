@@ -6,11 +6,24 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class AuthRequest {
+public class UpdateRequest {
+
+    @NotEmpty
+    private String nom;
+
+    @NotEmpty
+    private String prenom;
+
+    @NotEmpty
+    private String email;
+
+    @NotEmpty
+    private String telephone;
+
     @NotEmpty
     private String username;
 
     @NotEmpty
-    @Size(min = 2)
+    @Size(min = 6)
     private String password;
 }

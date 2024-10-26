@@ -19,7 +19,12 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http, JwtHeaderFilter jwtHeaderFilter) throws Exception {
         http.authorizeHttpRequests(authorize -> {
 
-            authorize.requestMatchers("/**").permitAll();
+            //authorize.requestMatchers("/**").permitAll(); // Test full open
+            authorize.requestMatchers("/api/utilisateur/auth").permitAll();
+            authorize.requestMatchers("/api/utilisateur/subscribe").permitAll();
+
+            // The rest of the API is protected
+            authorize.anyRequest().authenticated();
         });
 
         http.csrf(csrf -> csrf.disable());

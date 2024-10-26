@@ -1,19 +1,18 @@
 package fr.reservacances.api.utilisateur;
 
 
+import fr.reservacances.request.utilisateur.UpdateRequest;
+import fr.reservacances.response.utilisateur.UtilisateurInfoResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import fr.reservacances.config.JwtUtil;
 import fr.reservacances.exception.UtilisateurNotFoundException;
@@ -22,7 +21,7 @@ import fr.reservacances.model.utilisateur.Utilisateur;
 import fr.reservacances.repository.utilisateur.UtilisateurRepository;
 import fr.reservacances.request.utilisateur.AuthRequest;
 import fr.reservacances.request.utilisateur.SubscribeRequest;
-import fr.reservacances.response.UtilisateurResponse;
+import fr.reservacances.response.utilisateur.UtilisateurResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -87,8 +86,32 @@ public class UtilisateurApiController {
         return utilisateur.getId();
     }
 
-    private UtilisateurResponse convert(Utilisateur utilisateur) {
-        UtilisateurResponse response = UtilisateurResponse.builder().build();
+    @GetMapping("/get")
+    @PreAuthorize("isAuthenticated()")
+    public UtilisateurInfoResponse get() {
+        String utilisateurid = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println("utilisateurid: " + utilisateurid);
+        Utilisateur utilisateur = this.repository.findById(utilisateurid).orElseThrow(UtilisateurNotFoundException::new);
+        return this.convertInfo(utilisateur);
+    }
+
+    @PutMapping("/update")
+    @PreAuthorize("isAuthenticated()")
+    public UtilisateurInfoResponse update(@RequestBody UpdateRequest request) {
+        String utilisateurid = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Utilisateur utilisateur = this.repository.findById(utilisateurid).orElseThrow(UtilisateurNotFoundException::new);
+
+        BeanUtils.copyProperties(request, utilisateur);
+
+        utilisateur.setMotDePasse(this.passwordEncoder.encode(request.getPassword())); // update password if changed
+
+        this.repository.save(utilisateur);
+
+        return this.convertInfo(utilisateur);
+    }
+
+    private UtilisateurInfoResponse convertInfo(Utilisateur utilisateur) {
+        UtilisateurInfoResponse response = UtilisateurInfoResponse.builder().build();
         BeanUtils.copyProperties(utilisateur, response);
         return response;
     }

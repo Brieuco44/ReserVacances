@@ -1,4 +1,4 @@
-package fr.reservacances.response;
+package fr.reservacances.response.utilisateur;
 
 import lombok.Builder;
 import lombok.Getter;
