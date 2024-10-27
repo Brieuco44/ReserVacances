@@ -21,16 +21,16 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 @Log4j2
 public class MarqueApiController {
-    private final MarqueRepository marqueRepository;
+    private final MarqueRepository repository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     // @PreAuthorize("isAuthenticated()") // CREER UN ROLE CAR_MANAGER ET UTILISER LA METHODE iSCarManager() DU SECURITY SERVICE
-    public String create(@Valid @RequestBody CreateOrUpdateMarqueRequest request, Authentication authentication) {
+    public String create(@Valid @RequestBody CreateOrUpdateMarqueRequest request) {
         Marque marque = new Marque();
         BeanUtils.copyProperties(request, marque);
         
-        this.marqueRepository.save(marque);
+        this.repository.save(marque);
         
         log.debug("Marque {} créée!", marque.getId());
         
