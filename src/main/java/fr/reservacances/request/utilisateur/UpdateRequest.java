@@ -2,10 +2,12 @@ package fr.reservacances.request.utilisateur;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdateRequest {
 
     @NotEmpty

@@ -1,12 +1,12 @@
 package fr.reservacances.request.voiture;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter
-@Builder 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateOrUpdateVoitureRequest {
     
     @NotBlank
