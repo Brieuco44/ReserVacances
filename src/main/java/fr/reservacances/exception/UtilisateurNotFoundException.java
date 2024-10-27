@@ -1,4 +1,4 @@
-package fr.reservacances.exceptions;
+package fr.reservacances.exception;
 
 public class UtilisateurNotFoundException extends EntityNotFoundException {
     
