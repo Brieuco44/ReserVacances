@@ -1,11 +1,8 @@
 package fr.reservacances.api.utilisateur;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import fr.reservacances.model.utilisateur.Role;
 import fr.reservacances.repository.utilisateur.RoleRepository;
@@ -33,5 +30,18 @@ public class RoleApiController {
         log.debug("Role {} créé!", role.getId());
 
         return role.getId();
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@PathVariable String id, @Valid @RequestBody RoleRequest request) {
+        Role role = this.roleRepository.findById(id).orElseThrow();
+
+        role.setNom(request.getNom());
+
+        this.roleRepository.save(role);
+
+        log.debug("Role {} mis à jour!", role.getId());
     }
 }

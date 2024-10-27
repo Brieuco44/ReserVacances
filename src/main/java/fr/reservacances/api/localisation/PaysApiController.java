@@ -24,8 +24,8 @@ public class PaysApiController {
     private final PaysRepository paysRepository;
 
     @PostMapping()
-    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("isAuthenticated()")
     public String createPays(@Valid @RequestBody CreateOrUpdatePaysRequest request) {
         Pays pays = new Pays();
 

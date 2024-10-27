@@ -1,32 +1,34 @@
 package fr.reservacances.request.utilisateur;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SubscribeRequest {
 
-    @NotEmpty
+    @NotBlank
     private String nom;
 
-    @NotEmpty
+    @NotBlank
     private String prenom;
 
-    @NotEmpty
+    @NotBlank
     private String email;
 
-    @NotEmpty
+    @NotBlank
     private String telephone;
 
-    @NotEmpty
+    @NotBlank
     private String username;
 
-    @NotEmpty
+    @NotBlank
     @Size(min = 6)
     private String password;
 
-    @NotEmpty
+    @NotBlank
     private String role_id;
 }

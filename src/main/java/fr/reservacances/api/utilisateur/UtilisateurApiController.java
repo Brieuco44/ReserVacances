@@ -2,6 +2,7 @@ package fr.reservacances.api.utilisateur;
 
 
 import fr.reservacances.request.utilisateur.UpdateRequest;
+import fr.reservacances.response.config.MessageResponse;
 import fr.reservacances.response.utilisateur.UtilisateurInfoResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import fr.reservacances.config.JwtUtil;
-import fr.reservacances.exception.UtilisateurNotFoundException;
+import fr.reservacances.exceptions.UtilisateurNotFoundException;
 import fr.reservacances.model.utilisateur.Role;
 import fr.reservacances.model.utilisateur.Utilisateur;
 import fr.reservacances.repository.utilisateur.UtilisateurRepository;
@@ -68,7 +69,7 @@ public class UtilisateurApiController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public String create(@RequestBody SubscribeRequest request) {
+    public UtilisateurInfoResponse create(@Valid @RequestBody SubscribeRequest request) {
         Utilisateur utilisateur = new Utilisateur();
         Role role = new Role();
 
@@ -83,7 +84,7 @@ public class UtilisateurApiController {
 
         this.repository.save(utilisateur);
 
-        return utilisateur.getId();
+        return this.convertInfo(utilisateur);
     }
 
     @GetMapping("/get")
@@ -108,6 +109,20 @@ public class UtilisateurApiController {
         this.repository.save(utilisateur);
 
         return this.convertInfo(utilisateur);
+    }
+
+    @DeleteMapping("/delete")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
+    public MessageResponse delete(@RequestParam String id) {
+        this.repository.deleteById(id);
+        return new MessageResponse("Utilisateur deleted");
+    }
+
+    @PostMapping("/logout")
+    @PreAuthorize("isAuthenticated()")
+    public MessageResponse logout() {
+        SecurityContextHolder.clearContext();
+        return new MessageResponse("Logout successful");
     }
 
     private UtilisateurInfoResponse convertInfo(Utilisateur utilisateur) {
