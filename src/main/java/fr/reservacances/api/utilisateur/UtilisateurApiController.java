@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import fr.reservacances.config.JwtUtil;
-import fr.reservacances.exception.UtilisateurNotFoundException;
+import fr.reservacances.exception.utilisateur.UtilisateurNotFoundException;
 import fr.reservacances.model.utilisateur.Role;
 import fr.reservacances.model.utilisateur.Utilisateur;
 import fr.reservacances.repository.utilisateur.UtilisateurRepository;
