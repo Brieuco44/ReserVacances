@@ -1,4 +1,4 @@
-package fr.reservacances.response;
+package fr.reservacances.response.voiture;
 
 import lombok.Builder;
 import lombok.Getter;
