@@ -22,5 +22,5 @@ public class CreateOrUpdateReservationVoitureRequest {
 
     public String voitureId;
 
-    public String utilisateurId;
+    // public String utilisateurId;
 }
