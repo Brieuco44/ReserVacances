@@ -22,6 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+
 @RestController
 @RequestMapping("/api/reservation/voiture")
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class ReservationVoitureApiController {
     // @PreAuthorize("isAuthenticated()") // CREER UN ROLE CAR_MANAGER ET UTILISER
     // LA METHODE iSCarManager() DU SECURITY SERVICE
     public String create(@Valid @RequestBody CreateOrUpdateReservationVoitureRequest request , Authentication authentication) {
+        System.out.println(authentication);
         ReservationVoiture reservationVoiture = new ReservationVoiture();
         Utilisateur utilisateur = this.utilisateurRepository.findById(authentication.getPrincipal().toString()).orElseThrow(UtilisateurNotFoundException::new);
         Voiture voiture = this.voitureRepository.findById(request.voitureId).orElseThrow(VoitureNotFoundException::new);
@@ -50,6 +52,8 @@ public class ReservationVoitureApiController {
 
         return reservationVoiture.getId();
     }
+
+    
 }
 
 
