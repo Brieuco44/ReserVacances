@@ -13,17 +13,18 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "chambre")
-@Getter @Setter
+@Getter
+@Setter
 public class Chambre {
     @Id
     @UuidGenerator
     private String id;
 
     @Column(nullable = false)
-    private String numero; 
+    private String numero;
 
     @Column(nullable = false)
-    private int nbPlace; 
+    private int nbPlace;
 
     @Column(nullable = false)
     private double prix;
