@@ -25,7 +25,7 @@ public class AeroportApiController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public AeroportInfoResponse createAeroport(@Valid @RequestBody CreateOrUpdateAeroportRequest request) {
         Aeroport aeroport = new Aeroport();
 
