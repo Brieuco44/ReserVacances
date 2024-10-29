@@ -7,16 +7,12 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateOrUpdateAvionRequest {
+public class CreateOrUpdateAvionModelRequest {
 
     @NotBlank
     private String nom;
 
     @NotBlank
-    private String compagnieId;
-
-
-    @NotBlank
-    private String modeleAvionId;
+    private int nbPassagers;
 
 }
