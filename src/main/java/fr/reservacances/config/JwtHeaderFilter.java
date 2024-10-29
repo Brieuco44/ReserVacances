@@ -4,6 +4,7 @@ package fr.reservacances.config;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import fr.reservacances.constant.constant;
@@ -39,11 +40,11 @@ public class JwtHeaderFilter extends OncePerRequestFilter {
             if (optUser.isPresent()) {
                 List<GrantedAuthority> authorities = new ArrayList<>();
 
-                if (optUser.get().getRole().getNom()==constant.ROLE_ADMIN) {
+                if (Objects.equals(optUser.get().getRole().getNom(), constant.ROLE_ADMIN)) {
                     authorities.add(new SimpleGrantedAuthority(constant.ROLE_ADMIN));
                 }
 
-                if (optUser.get().getRole().getNom()==constant.ROLE_USER) {
+                if (Objects.equals(optUser.get().getRole().getNom(), constant.ROLE_USER)) {
                     authorities.add(new SimpleGrantedAuthority(constant.ROLE_USER));
                 }
 
