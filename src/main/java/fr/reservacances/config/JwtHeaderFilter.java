@@ -38,10 +38,13 @@ public class JwtHeaderFilter extends OncePerRequestFilter {
             
             if (optUser.isPresent()) {
                 List<GrantedAuthority> authorities = new ArrayList<>();
-                
 
                 if (optUser.get().getRole().getNom()==constant.ROLE_ADMIN) {
                     authorities.add(new SimpleGrantedAuthority(constant.ROLE_ADMIN));
+                }
+
+                if (optUser.get().getRole().getNom()==constant.ROLE_USER) {
+                    authorities.add(new SimpleGrantedAuthority(constant.ROLE_USER));
                 }
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
