@@ -23,6 +23,23 @@ public class AeroportApiController {
     private final AeroportRepository aeroport;
     private final VilleRepository villerepo;
 
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
+    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    public Iterable<AeroportInfoResponse> getAeroports() {
+        return this.aeroport.findAll().stream()
+                .map(this::convertInfo)
+                .toList();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    public AeroportInfoResponse getAeroport(@PathVariable String id) {
+        Aeroport aeroport = this.aeroport.findById(id).orElseThrow();
+        return this.convertInfo(aeroport);
+    }
+
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")

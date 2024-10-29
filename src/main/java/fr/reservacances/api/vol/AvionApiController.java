@@ -32,10 +32,27 @@ public class AvionApiController {
     private final ModelAvionRepository modeleavionrepo;
     private final CompagnieRepository compagnierepo;
 
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
+    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    public Iterable<AvionInfoResponse> getAvions() {
+        return this.avionrepository.findAll().stream()
+                .map(this::convertInfo)
+                .toList();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    public AvionInfoResponse getAvion(@PathVariable String id) {
+        Avion avion = this.avionrepository.findById(id).orElseThrow();
+        return this.convertInfo(avion);
+    }
+
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public AvionInfoResponse createAeroport(@Valid @RequestBody CreateOrUpdateAvionRequest request) {
+    public AvionInfoResponse createAvion(@Valid @RequestBody CreateOrUpdateAvionRequest request) {
         Avion avion = new Avion();
 
         updateAvion(request, avion);
@@ -48,7 +65,7 @@ public class AvionApiController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public AvionInfoResponse updateAeroport(@PathVariable String id, @Valid @RequestBody CreateOrUpdateAvionRequest request) {
+    public AvionInfoResponse updateAvion(@PathVariable String id, @Valid @RequestBody CreateOrUpdateAvionRequest request) {
         Avion avion = this.avionrepository.findById(id).orElseThrow();
 
         updateAvion(request, avion);
@@ -62,7 +79,7 @@ public class AvionApiController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void deleteAeroport(@PathVariable String id) {
+    public void deleteAvion(@PathVariable String id) {
         Avion avion = this.avionrepository.findById(id).orElseThrow();
         this.avionrepository.delete(avion);
     }

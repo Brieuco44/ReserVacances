@@ -1,6 +1,7 @@
 package fr.reservacances.request.vol;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter @Setter
@@ -12,7 +13,7 @@ public class CreateOrUpdateAvionModelRequest {
     @NotBlank
     private String nom;
 
-    @NotBlank
-    private int nbPassagers;
+    @NotNull
+    private int nbPlace;
 
 }

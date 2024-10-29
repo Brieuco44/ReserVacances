@@ -21,10 +21,27 @@ import org.springframework.web.bind.annotation.*;
 public class ModelAvionApiController {
     private final ModelAvionRepository modeleavionrepo;
 
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
+    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    public Iterable<ModelAvionInfoResponse> getModelAvions() {
+        return this.modeleavionrepo.findAll().stream()
+                .map(this::convertInfo)
+                .toList();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    public ModelAvionInfoResponse getModelAvion(@PathVariable String id) {
+        ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
+        return this.convertInfo(modeleAvion);
+    }
+
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAvionInfoResponse createAeroport(@Valid @RequestBody CreateOrUpdateAvionModelRequest request) {
+    public ModelAvionInfoResponse createModelAvion(@Valid @RequestBody CreateOrUpdateAvionModelRequest request) {
         ModeleAvion modeleAvion = new ModeleAvion();
 
         BeanUtils.copyProperties(request, modeleAvion);
@@ -39,7 +56,7 @@ public class ModelAvionApiController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAvionInfoResponse updateAeroport(@PathVariable String id, @Valid @RequestBody CreateOrUpdateAvionModelRequest request) {
+    public ModelAvionInfoResponse updateModelAvion(@PathVariable String id, @Valid @RequestBody CreateOrUpdateAvionModelRequest request) {
         ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
 
         BeanUtils.copyProperties(request, modeleAvion);
@@ -56,7 +73,7 @@ public class ModelAvionApiController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void deleteAeroport(@PathVariable String id) {
+    public void deleteModelAvion(@PathVariable String id) {
         ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
         this.modeleavionrepo.delete(modeleAvion);
     }
