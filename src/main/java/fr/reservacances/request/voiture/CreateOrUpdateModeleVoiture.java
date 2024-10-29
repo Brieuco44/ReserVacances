@@ -6,19 +6,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class CreateOrUpdateVoitureRequest {
-    
+public class CreateOrUpdateModeleVoiture {
+
+    @NotBlank
+    public String nom;
+
     @NotNull
-    private double prix;
+    private int nbPlace;
+
+    private String description;
 
     @NotBlank
-    private String modeleVoitureId;
-
-    @NotBlank
-    private String villeId;
-
+    private String marqueId;
 }

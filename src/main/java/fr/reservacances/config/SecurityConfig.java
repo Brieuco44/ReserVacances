@@ -13,20 +13,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity() // Active les annotations @PreAuthorize
+@EnableMethodSecurity(prePostEnabled = true) // Active les annotations @PreAuthorize
 public class SecurityConfig {
-
 
     @Bean // Configuration des accès (Authorization)
     SecurityFilterChain filterChain(HttpSecurity http, JwtHeaderFilter jwtHeaderFilter) throws Exception {
         http.authorizeHttpRequests(authorize -> {
-
-            //authorize.requestMatchers("/**").permitAll(); // Test full open
-            authorize.requestMatchers("/api/utilisateur/auth").permitAll();
-            authorize.requestMatchers("/api/utilisateur/subscribe").permitAll();
-
-            // The rest of the API is protected
-            authorize.requestMatchers("/**").authenticated();
+            authorize.requestMatchers("/**").permitAll(); // Test full open
         });
 
         http.csrf(AbstractHttpConfigurer::disable);
