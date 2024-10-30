@@ -4,22 +4,29 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.reservacances.exception.hotel.HotelNotFoundException;
+import fr.reservacances.exception.hotel.ChambreNotFoundException;
 import fr.reservacances.exception.hotel.ReservatioHotelNotFoundException;
+import fr.reservacances.exception.utilisateur.UtilisateurNotFoundException;
 import fr.reservacances.model.hotel.Chambre;
-import fr.reservacances.model.hotel.Hotel;
 import fr.reservacances.model.hotel.ReservationHotel;
+import fr.reservacances.model.utilisateur.Utilisateur;
+import fr.reservacances.repository.hotel.ChambreRepository;
 import fr.reservacances.repository.hotel.ReservationHotelRepository;
-import fr.reservacances.request.hotel.CreateOrUpdateChambreRequest;
+import fr.reservacances.repository.utilisateur.UtilisateurRepository;
+import fr.reservacances.request.hotel.CreateOrUpdateReservationHotelRequest;
 import fr.reservacances.response.Hotel.ReservationHotelResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +39,8 @@ import lombok.extern.log4j.Log4j2;
 public class ReservationHotelApiController {
 
     private final ReservationHotelRepository reservationHotelRepository;
+    private final UtilisateurRepository utilisateurRepository;
+    private final ChambreRepository chambreRepository;
 
     @GetMapping
     public List<ReservationHotelResponse> findAll() {
@@ -66,11 +75,83 @@ public class ReservationHotelApiController {
                 .toList();
     }
 
-
     private ReservationHotelResponse convert(ReservationHotel reservationHotel) {
         ReservationHotelResponse resp = ReservationHotelResponse.builder().build();
         BeanUtils.copyProperties(reservationHotel, resp);
         return resp;
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("isAuthenticated()")
+    public String create(@Valid @RequestBody CreateOrUpdateReservationHotelRequest request,
+            Authentication authentication) {
+        ReservationHotel reservationHotel = new ReservationHotel();
+        Utilisateur utilisateur = this.utilisateurRepository.findById(authentication.getPrincipal().toString())
+                .orElseThrow(UtilisateurNotFoundException::new);
+        Chambre chambre = this.chambreRepository.findById(request.getChambreId())
+                .orElseThrow(ChambreNotFoundException::new);
+        List<ReservationHotel> reservationsExistantes = reservationHotelRepository.findReservationsByChambreAndDate(
+                request.getChambreId(),
+                request.getDateDebut(),
+                request.getDateFin());
+
+        if (!reservationsExistantes.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("La chambre est déjà réservée pour la période sélectionnée.").toString();
+        }
+
+        BeanUtils.copyProperties(request, reservationHotel);
+        reservationHotel.setUtilisateur(utilisateur);
+        reservationHotel.setChambre(chambre);
+
+        this.reservationHotelRepository.save(reservationHotel);
+
+        log.debug("Réservation {} créée!", reservationHotel.getId());
+
+        return reservationHotel.getId();
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String update(@PathVariable String id, @Valid @RequestBody CreateOrUpdateReservationHotelRequest request,
+            Authentication authentication) {
+        ReservationHotel reservationHotel = this.reservationHotelRepository.findById(id)
+                .orElseThrow(ReservatioHotelNotFoundException::new);
+        Chambre chambre = this.chambreRepository.findById(request.getChambreId())
+                .orElseThrow(ChambreNotFoundException::new);
+        Utilisateur utilisateur = this.utilisateurRepository.findById(authentication.getPrincipal().toString())
+                .orElseThrow(UtilisateurNotFoundException::new);
+        List<ReservationHotel> reservationsExistantes = reservationHotelRepository.findReservationsByChambreAndDate(
+                request.getChambreId(),
+                request.getDateDebut(),
+                request.getDateFin());
+
+        if (!reservationsExistantes.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("La chambre est déjà réservée pour la période sélectionnée.").toString();
+        }
+
+        BeanUtils.copyProperties(request, reservationHotel);
+        reservationHotel.setUtilisateur(utilisateur);
+        reservationHotel.setChambre(chambre);
+
+        this.reservationHotelRepository.save(reservationHotel);
+
+        log.debug("Réservation {} créée!", reservationHotel.getId());
+
+        return reservationHotel.getId();
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public void delete(@PathVariable String id) {
+        ReservationHotel reservationHotel = this.reservationHotelRepository.findById(id)
+                .orElseThrow(ReservatioHotelNotFoundException::new);
+
+        this.reservationHotelRepository.delete(reservationHotel);
+
+        log.debug("Réservation {} supprimée!", id);
     }
 
 }
