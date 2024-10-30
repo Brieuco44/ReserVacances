@@ -112,7 +112,7 @@ public class UtilisateurApiController {
     }
 
     @DeleteMapping("/delete")
-    @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public MessageResponse delete(@RequestBody String id) {
         this.repository.deleteById(id);
         return new MessageResponse("Utilisateur deleted");

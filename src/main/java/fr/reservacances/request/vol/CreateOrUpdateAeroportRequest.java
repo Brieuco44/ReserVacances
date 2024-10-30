@@ -1,19 +1,17 @@
-package fr.reservacances.request.voiture;
+package fr.reservacances.request.vol;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-
 
 @Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateOrUpdateMarqueRequest {
+public class CreateOrUpdateAeroportRequest {
 
     @NotBlank
     private String nom;
 
     @NotBlank
-    private String villeId;
-
+    private String ville_id;
 }

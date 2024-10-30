@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-@Builder 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateOrUpdateVoitureRequest {
     
     @NotNull
