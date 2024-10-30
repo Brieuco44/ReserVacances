@@ -98,12 +98,12 @@ public class AvionApiController {
         this.avionrepository.save(avion);
     }
 
-    private AvionInfoResponse convertInfo(Avion aeroport) {
-        Compagnie compagnie = aeroport.getCompagnie();
-        ModeleAvion modeleAvion = aeroport.getModeleAvion();
+    private AvionInfoResponse convertInfo(Avion avion) {
+        Compagnie compagnie = avion.getCompagnie();
+        ModeleAvion modeleAvion = avion.getModeleAvion();
 
         return AvionInfoResponse.builder()
-                .id(aeroport.getId())
+                .id(avion.getId())
                 .idcompagnie(compagnie.getId())
                 .nomcompagnie(compagnie.getNom())
                 .idmodeleavion(modeleAvion.getId())
