@@ -73,7 +73,7 @@ public class UtilisateurApiController {
         Utilisateur utilisateur = new Utilisateur();
         Role role = new Role();
 
-        // ger role with id from request
+        // get role with id from request
         role.setId(request.getRole_id());
 
         utilisateur.setRole(role);
