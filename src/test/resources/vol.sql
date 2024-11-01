@@ -1,0 +1,21 @@
+INSERT INTO reservacances.modele_avion (id, nb_place, nom)
+VALUES
+    ('4a8f91e6-5670-44f6-a469-341fa9d65c3d', 350, 'Airbus A380'),
+    ('5b9a27f7-6781-4af9-8f0a-4d8a6c77c8e1', 180, 'Boeing 737'),
+    ('6c1a38e8-7892-4bf9-9a1b-5e9b7d88d9f2', 215, 'Airbus A320'),
+    ('7d2a49f9-8903-4cf9-9b2c-6f0c8e99e0f3', 314, 'Boeing 777'),
+    ('8e3a5af0-9014-4df9-9c3d-7g1d9fa1f104', 160, 'Embraer E195'),
+    ('9f4a6bf1-0125-4ef9-9d4e-8h2e0gb2g215', 240, 'Airbus A321neo'),
+    ('1a5b7c02-1236-4ff9-9e5f-9i3f1hc3h326', 280, 'Boeing 787 Dreamliner'),
+    ('2b6c8d13-2347-4gf9-9f6g-aj4g2id4i437', 98, 'Bombardier CRJ900'),
+    ('3c7d9e24-3458-4hf9-9g7h-bk5h3je5j548', 158, 'Airbus A220'),
+    ('4d8eaf35-4569-4if9-9h8i-cl6i4kf6k659', 853, 'Boeing 747'),
+    ('5e9fb046-567a-4jf9-9i9j-dm7j5lg7l760', 300, 'McDonnell Douglas MD-11'),
+    ('6f1gc157-678b-4kf9-9j0k-en8k6mh8m871', 300, 'Airbus A330'),
+    ('7g2hd268-789c-4lf9-9k1l-fo9l7ni9n982', 136, 'Airbus A319'),
+    ('8h3ie379-890d-4mf9-9l2m-gp0m8oj0o093', 108, 'Embraer E175'),
+    ('9i4jf480-901e-4ng9-9m3n-hq1n9pk1p1a4', 180, 'Boeing 757'),
+    ('1j5kg591-012f-4oh9-9n4o-ir2o0ql2q2b5', 100, 'ATR 72'),
+    ('2k6lh6a2-123g-4pi9-9o5p-js3p1rm3r3c6', 66, 'Cessna 208 Caravan'),
+    ('3l7mi7b3-234h-4qj9-9p6q-kt4q2sn4s4d7', 150, 'Airbus A318'),
+    ('4m8nj8c4-345i-4rk9-9q7r-lu5r3to5t5e8', 85, 'De Havilland Dash 8 Q400');
