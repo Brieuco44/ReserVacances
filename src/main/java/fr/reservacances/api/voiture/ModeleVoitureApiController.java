@@ -23,7 +23,7 @@ import fr.reservacances.model.voiture.Marque;
 import fr.reservacances.model.voiture.ModeleVoiture;
 import fr.reservacances.repository.voiture.MarqueRepository;
 import fr.reservacances.repository.voiture.ModeleVoitureRepository;
-import fr.reservacances.request.voiture.CreateOrUpdateModeleVoiture;
+import fr.reservacances.request.voiture.CreateOrUpdateModeleVoitureRequest;
 import fr.reservacances.response.voiture.ModeleVoitureResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class ModeleVoitureApiController {
     @PostMapping
     @PreAuthorize("hasRole('ROLE_CAR_MANAGER')")
     @ResponseStatus(HttpStatus.CREATED)
-    public String create(@Valid @RequestBody CreateOrUpdateModeleVoiture request) {
+    public String create(@Valid @RequestBody CreateOrUpdateModeleVoitureRequest request) {
         Marque marque = this.marqueRepository.findById(request.getMarqueId()).orElseThrow(MarqueNotFoundException::new);
 
         ModeleVoiture modeleVoiture = new ModeleVoiture();
@@ -80,18 +80,11 @@ public class ModeleVoitureApiController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_CAR_MANAGER')")
-    public String update(@PathVariable String id, @Valid @RequestBody CreateOrUpdateModeleVoiture request) {
+    public String update(@PathVariable String id, @Valid @RequestBody CreateOrUpdateModeleVoitureRequest request) {
         ModeleVoiture modeleVoiture = this.repository.findById(id).orElseThrow(ModeleVoitureNotFoundException::new);
         BeanUtils.copyProperties(request, modeleVoiture);
         log.debug("Marque {} mise à jour!", id);
         return modeleVoiture.getId();
-    }
-
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_CAR_MANAGER')")
-    public void deleteById(@PathVariable String id) {
-        this.repository.deleteById(id);
-        log.debug("Modèle voiture {} supprimé!", id);
     }
 
     private ModeleVoitureResponse convert(ModeleVoiture modeleVoiture) {

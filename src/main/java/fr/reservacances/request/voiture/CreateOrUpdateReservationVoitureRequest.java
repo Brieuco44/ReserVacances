@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class CreateOrUpdateReservationVoitureRequest {
-    public String id;
+    // public String id;
 
     @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     public LocalDateTime dateDebut;
