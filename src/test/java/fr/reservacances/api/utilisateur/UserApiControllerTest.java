@@ -1,4 +1,4 @@
-package fr.reservacances.api;
+package fr.reservacances.api.utilisateur;
 
 import fr.reservacances.TestUtil;
 import fr.reservacances.api.utilisateur.UtilisateurApiController;

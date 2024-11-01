@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,9 +42,8 @@ public class VoitureApiController {
     private final VilleRepository villeRepository;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_CAR_MANAGER')")
     @ResponseStatus(HttpStatus.CREATED)
-    // @PreAuthorize("isAuthenticated()") // CREER UN ROLE CAR_MANAGER ET UTILISER
-    // LA METHODE iSCarManager() DU SECURITY SERVICE
     public String create(@Valid @RequestBody CreateOrUpdateVoitureRequest request) {
 
         ModeleVoiture modeleVoiture = this.modeleVoitureRepository.findById(request.getModeleVoitureId())
@@ -52,7 +54,6 @@ public class VoitureApiController {
         voiture.setPrix(request.getPrix());
         voiture.setModeleVoiture(modeleVoiture);
         voiture.setVille(ville);
-        // BeanUtils.copyProperties(request, voiture);
 
         this.repository.save(voiture);
 
@@ -72,7 +73,8 @@ public class VoitureApiController {
     }
 
     @GetMapping("/available")
-    public List<VoitureResponse> findAllAvailable(@RequestParam LocalDateTime dateDebut, @RequestParam LocalDateTime dateFin) {
+    public List<VoitureResponse> findAllAvailable(@RequestParam LocalDateTime dateDebut,
+            @RequestParam LocalDateTime dateFin) {
         log.debug("Finding all available voitures between {} and {}", dateDebut, dateFin);
 
         List<VoitureResponse> voituresResponses = this.repository.findAvailableVoitures(dateDebut, dateFin)
@@ -85,7 +87,7 @@ public class VoitureApiController {
         return voituresResponses;
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public VoitureResponse findById(@PathVariable String id) {
         Voiture voiture = this.repository.findById(id).orElseThrow(VoitureNotFoundException::new);
         return VoitureResponse.builder()
@@ -94,6 +96,22 @@ public class VoitureApiController {
                 .modeleVoitureId(voiture.getModeleVoiture().getId())
                 .villeId(voiture.getVille().getId())
                 .build();
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CAR_MANAGER')")
+    public String update(@PathVariable String id, @Valid @RequestBody CreateOrUpdateVoitureRequest request) {
+        Voiture voiture = this.repository.findById(id).orElseThrow(VoitureNotFoundException::new);
+        BeanUtils.copyProperties(request, voiture);
+        log.debug("Marque {} mise à jour!", id);
+        return voiture.getId();
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CAR_MANAGER')")
+    public void deleteById(@PathVariable String id) {
+        this.repository.deleteById(id);
+        log.debug("Voiture {} supprimé!", id);
     }
 
     private VoitureResponse convert(Voiture voiture) {
