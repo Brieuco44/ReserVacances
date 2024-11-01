@@ -14,7 +14,8 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "hotel")
-@Getter @Setter
+@Getter
+@Setter
 public class Hotel {
     @Id
     @UuidGenerator
