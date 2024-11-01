@@ -1,5 +1,7 @@
 package fr.reservacances.api.vol;
 
+import fr.reservacances.exception.ErrorThrowException;
+import fr.reservacances.exception.vol.NotEnouthPlaceException;
 import fr.reservacances.model.localisation.Pays;
 import fr.reservacances.model.localisation.Ville;
 import fr.reservacances.model.utilisateur.Utilisateur;
@@ -37,67 +39,80 @@ public class ReservationVolApiController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ReservationVolInfoResponse createReservation(@Valid @RequestBody CreateOrUpdateReservationVolRequest request) {
-        // verify that stay places are available
-        Integer nbPlacesAvailable = getNbPlacesAvailable(request.getVolId());
+        try{
+            // verify that stay places are available
+            Integer nbPlacesAvailable = getNbPlacesAvailable(request.getVolId());
 
-        if (nbPlacesAvailable < request.getNbAdulte() + request.getNbEnfant()) {
-            throw new RuntimeException("Not enough places available");
+            if (nbPlacesAvailable < request.getNbAdulte() + request.getNbEnfant()) {
+                throw new NotEnouthPlaceException();
+            }
+
+            ReservationVol reservationVol = new ReservationVol();
+
+            BeanUtils.copyProperties(request, reservationVol);
+
+            String utilisateurid = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur.setId(utilisateurid);
+
+            Vol vol = new Vol();
+            vol.setId(request.getVolId());
+
+            reservationVol.setUtilisateur(utilisateur);
+            reservationVol.setVol(vol);
+
+            log.debug("ReservationVol {} créée!", reservationVol.getId());
+
+            this.reservationVolRepository.save(reservationVol);
+
+            return convertInfo(reservationVol);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
         }
-
-
-
-        ReservationVol reservationVol = new ReservationVol();
-
-        BeanUtils.copyProperties(request, reservationVol);
-
-        String utilisateurid = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Utilisateur utilisateur = new Utilisateur();
-        utilisateur.setId(utilisateurid);
-
-        Vol vol = new Vol();
-        vol.setId(request.getVolId());
-
-        reservationVol.setUtilisateur(utilisateur);
-        reservationVol.setVol(vol);
-
-        log.debug("ReservationVol {} créée!", reservationVol.getId());
-
-        this.reservationVolRepository.save(reservationVol);
-
-        return convertInfo(reservationVol);
     }
 
     @GetMapping("/nbplaces/{volId}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Integer getNbPlacesAvailable(@PathVariable String volId) {
-        // Get model nb places available by vol id
-        ModeleAvion modeleAvion = this.volRepository.findById(volId).orElseThrow().getAvion().getModeleAvion();
+        try{
+            // Get model nb places available by vol id
+            ModeleAvion modeleAvion = this.volRepository.findById(volId).orElseThrow().getAvion().getModeleAvion();
 
-        Integer nbPlaces = modeleAvion.getNbPlace();
+            Integer nbPlaces = modeleAvion.getNbPlace();
 
-        // Get total nb places reserved by vol id
-        Integer nbPlacesReserved = this.reservationVolRepository.getTotalPlacesByVolId(volId);
+            // Get total nb places reserved by vol id
+            Integer nbPlacesReserved = this.reservationVolRepository.getTotalPlacesByVolId(volId);
 
-        return nbPlaces - nbPlacesReserved;
+            return nbPlaces - nbPlacesReserved;
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteReservation(@PathVariable String id) {
-        // Delete the reservation by id and verify that the user is the owner of the reservation
-        String utilisateurid = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try{
+            // Delete the reservation by id and verify that the user is the owner of the reservation
+            String utilisateurid = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        ReservationVol reservationVol = this.reservationVolRepository.findById(id).orElseThrow();
+            ReservationVol reservationVol = this.reservationVolRepository.findById(id).orElseThrow();
 
-        if (!reservationVol.getUtilisateur().getId().equals(utilisateurid)) {
-            throw new RuntimeException("You are not the owner of this reservation");
+            if (!reservationVol.getUtilisateur().getId().equals(utilisateurid)) {
+                throw new RuntimeException("You are not the owner of this reservation");
+            }
+
+            this.reservationVolRepository.deleteById(id);
+
+            log.debug("ReservationVol {} supprimée!", id);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
         }
-
-        this.reservationVolRepository.deleteById(id);
-
-        log.debug("ReservationVol {} supprimée!", id);
     }
 
 

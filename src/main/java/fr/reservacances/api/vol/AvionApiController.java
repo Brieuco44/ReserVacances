@@ -1,5 +1,6 @@
 package fr.reservacances.api.vol;
 
+import fr.reservacances.exception.ErrorThrowException;
 import fr.reservacances.model.localisation.Pays;
 import fr.reservacances.model.localisation.Ville;
 import fr.reservacances.model.vol.Aeroport;
@@ -36,43 +37,63 @@ public class AvionApiController {
     @ResponseStatus(HttpStatus.OK)
     //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
     public Iterable<AvionInfoResponse> getAvions() {
-        return this.avionrepository.findAll().stream()
-                .map(this::convertInfo)
-                .toList();
+        try {
+            return this.avionrepository.findAll().stream()
+                    .map(this::convertInfo)
+                    .toList();
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
     public AvionInfoResponse getAvion(@PathVariable String id) {
-        Avion avion = this.avionrepository.findById(id).orElseThrow();
-        return this.convertInfo(avion);
+        try {
+            Avion avion = this.avionrepository.findById(id).orElseThrow();
+            return this.convertInfo(avion);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public AvionInfoResponse createAvion(@Valid @RequestBody CreateOrUpdateAvionRequest request) {
-        Avion avion = new Avion();
+        try {
+            Avion avion = new Avion();
 
-        updateAvion(request, avion);
+            updateAvion(request, avion);
 
-        log.debug("Avion {} créée!", avion.getId());
+            log.debug("Avion {} créée!", avion.getId());
 
-        return this.convertInfo(avion);
+            return this.convertInfo(avion);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public AvionInfoResponse updateAvion(@PathVariable String id, @Valid @RequestBody CreateOrUpdateAvionRequest request) {
-        Avion avion = this.avionrepository.findById(id).orElseThrow();
+        try {
+            Avion avion = this.avionrepository.findById(id).orElseThrow();
 
-        updateAvion(request, avion);
+            updateAvion(request, avion);
 
-        log.debug("Avion {} mise à jour!", avion.getId());
+            log.debug("Avion {} mise à jour!", avion.getId());
 
-        return this.convertInfo(avion);
+            return this.convertInfo(avion);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
 
@@ -80,22 +101,31 @@ public class AvionApiController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteAvion(@PathVariable String id) {
-        Avion avion = this.avionrepository.findById(id).orElseThrow();
-        this.avionrepository.delete(avion);
+        try {
+            Avion avion = this.avionrepository.findById(id).orElseThrow();
+            this.avionrepository.delete(avion);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
 
-
     private void updateAvion(CreateOrUpdateAvionRequest request, Avion avion) {
-        Compagnie compagnie = this.compagnierepo.findById(request.getCompagnieId()).orElseThrow();
-        ModeleAvion modeleAvion = this.modeleavionrepo.findById(request.getModeleAvionId()).orElseThrow();
+        try {
+            Compagnie compagnie = this.compagnierepo.findById(request.getCompagnieId()).orElseThrow();
+            ModeleAvion modeleAvion = this.modeleavionrepo.findById(request.getModeleAvionId()).orElseThrow();
 
-        avion.setCompagnie(compagnie);
-        avion.setModeleAvion(modeleAvion);
+            avion.setCompagnie(compagnie);
+            avion.setModeleAvion(modeleAvion);
 
-        BeanUtils.copyProperties(request, avion);
+            BeanUtils.copyProperties(request, avion);
 
-        this.avionrepository.save(avion);
+            this.avionrepository.save(avion);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     private AvionInfoResponse convertInfo(Avion avion) {

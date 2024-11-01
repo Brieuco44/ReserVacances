@@ -1,5 +1,6 @@
 package fr.reservacances.api.vol;
 
+import fr.reservacances.exception.ErrorThrowException;
 import fr.reservacances.model.localisation.Pays;
 import fr.reservacances.model.localisation.Ville;
 import fr.reservacances.model.vol.*;
@@ -39,32 +40,47 @@ public class VolApiController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Iterable<VolInfoResponse> getVol() {
-        return this.volRepository.findAll().stream()
-                .map(this::convertInfo)
-                .toList();
+        try {
+            return this.volRepository.findAll().stream()
+                    .map(this::convertInfo)
+                    .toList();
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public VolInfoResponse getVol(@PathVariable String id) {
-        Vol vol = this.volRepository.findById(id).orElseThrow();
-        return this.convertInfo(vol);
+        try {
+            Vol vol = this.volRepository.findById(id).orElseThrow();
+            return this.convertInfo(vol);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Iterable<VolInfoResponse> searchVol(@RequestParam String dateDebut, @RequestParam String dateFin) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateDebutParsed = LocalDateTime.parse(dateDebut, formatter);
-        LocalDateTime dateFinParsed = LocalDateTime.parse(dateFin, formatter);
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime dateDebutParsed = LocalDateTime.parse(dateDebut, formatter);
+            LocalDateTime dateFinParsed = LocalDateTime.parse(dateFin, formatter);
 
-        Optional<List<Vol>> listeVol = Optional.of(this.volRepository.findByDateDebutBetween(dateDebutParsed, dateFinParsed).orElseThrow());
+            Optional<List<Vol>> listeVol = Optional.of(this.volRepository.findByDateDebutBetween(dateDebutParsed, dateFinParsed).orElseThrow());
 
-        return listeVol.get().stream()
-                .map(this::convertInfo)
-                .toList();
+            return listeVol.get().stream()
+                    .map(this::convertInfo)
+                    .toList();
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     // get nb places restantes
@@ -72,35 +88,44 @@ public class VolApiController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public int getPlacesRestantes(@PathVariable String id) {
-        Vol vol = this.volRepository.findById(id).orElseThrow();
+        try {
+            Vol vol = this.volRepository.findById(id).orElseThrow();
 
-        return vol.getAvion().getModeleAvion().getNbPlace();
+            return vol.getAvion().getModeleAvion().getNbPlace();
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public VolInfoResponse createVol(@Valid @RequestBody CreateOrUpdateVolRequest request) {
+        try {
+            Vol vol = new Vol();
+            BeanUtils.copyProperties(request, vol);
 
-        Vol vol = new Vol();
-        BeanUtils.copyProperties(request, vol);
+            // Affectation des dates converties
+            vol.setDateDebut(request.getDateDebut());
+            vol.setDateFin(request.getDateFin());
 
-        // Affectation des dates converties
-        vol.setDateDebut(request.getDateDebut());
-        vol.setDateFin(request.getDateFin());
+            Aeroport aeroportDepart = aeroportRepository.findById(request.getAeroportDepartId()).orElse(null);
+            Aeroport aeroportArrivee = aeroportRepository.findById(request.getAeroportArriveeId()).orElse(null);
 
-        Aeroport aeroportDepart = aeroportRepository.findById(request.getAeroportDepartId()).orElse(null);
-        Aeroport aeroportArrivee = aeroportRepository.findById(request.getAeroportArriveeId()).orElse(null);
+            vol.setAeroportDepart(aeroportDepart);
+            vol.setAeroportArrivee(aeroportArrivee);
 
-        vol.setAeroportDepart(aeroportDepart);
-        vol.setAeroportArrivee(aeroportArrivee);
+            Avion avion = avionRepository.findById(request.getAvionId()).orElse(null);
+            vol.setAvion(avion);
 
-        Avion avion = avionRepository.findById(request.getAvionId()).orElse(null);
-        vol.setAvion(avion);
+            volRepository.save(vol);
 
-        volRepository.save(vol);
-
-        return convertInfo(vol);
+            return convertInfo(vol);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
 

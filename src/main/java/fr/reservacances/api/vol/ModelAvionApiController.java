@@ -1,5 +1,6 @@
 package fr.reservacances.api.vol;
 
+import fr.reservacances.exception.ErrorThrowException;
 import fr.reservacances.model.vol.Avion;
 import fr.reservacances.model.vol.ModeleAvion;
 import fr.reservacances.repository.vol.ModelAvionRepository;
@@ -25,48 +26,67 @@ public class ModelAvionApiController {
     @ResponseStatus(HttpStatus.OK)
     //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
     public Iterable<ModelAvionInfoResponse> getModelAvions() {
-        return this.modeleavionrepo.findAll().stream()
-                .map(this::convertInfo)
-                .toList();
+        try {
+            return this.modeleavionrepo.findAll().stream()
+                    .map(this::convertInfo)
+                    .toList();
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
     public ModelAvionInfoResponse getModelAvion(@PathVariable String id) {
-        ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
-        return this.convertInfo(modeleAvion);
+        try {
+            ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
+            return this.convertInfo(modeleAvion);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAvionInfoResponse createModelAvion(@Valid @RequestBody CreateOrUpdateAvionModelRequest request) {
-        ModeleAvion modeleAvion = new ModeleAvion();
+        try {
+            ModeleAvion modeleAvion = new ModeleAvion();
 
-        BeanUtils.copyProperties(request, modeleAvion);
+            BeanUtils.copyProperties(request, modeleAvion);
 
-        modeleavionrepo.save(modeleAvion);
+            modeleavionrepo.save(modeleAvion);
 
-        log.debug("ModeleAvion {} créée!", modeleAvion.getId());
+            log.debug("ModeleAvion {} créée!", modeleAvion.getId());
 
-        return this.convertInfo(modeleAvion);
+            return this.convertInfo(modeleAvion);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAvionInfoResponse updateModelAvion(@PathVariable String id, @Valid @RequestBody CreateOrUpdateAvionModelRequest request) {
-        ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
+        try {
+            ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
 
-        BeanUtils.copyProperties(request, modeleAvion);
+            BeanUtils.copyProperties(request, modeleAvion);
 
-        modeleavionrepo.save(modeleAvion);
+            modeleavionrepo.save(modeleAvion);
 
-        log.debug("ModeleAvion {} mise à jour!", modeleAvion.getId());
+            log.debug("ModeleAvion {} mise à jour!", modeleAvion.getId());
 
-        return this.convertInfo(modeleAvion);
-
+            return this.convertInfo(modeleAvion);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
 
@@ -74,8 +94,13 @@ public class ModelAvionApiController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteModelAvion(@PathVariable String id) {
-        ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
-        this.modeleavionrepo.delete(modeleAvion);
+        try {
+            ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
+            this.modeleavionrepo.delete(modeleAvion);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
 

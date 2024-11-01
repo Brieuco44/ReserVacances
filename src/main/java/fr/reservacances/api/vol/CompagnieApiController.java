@@ -1,5 +1,6 @@
 package fr.reservacances.api.vol;
 
+import fr.reservacances.exception.ErrorThrowException;
 import fr.reservacances.model.vol.Compagnie;
 import fr.reservacances.model.vol.ModeleAvion;
 import fr.reservacances.repository.vol.CompagnieRepository;
@@ -26,47 +27,67 @@ public class CompagnieApiController {
     @ResponseStatus(HttpStatus.OK)
     //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
     public Iterable<CompagnieInfoResponse> getCompagnies() {
-        return this.compagnierepo.findAll().stream()
-                .map(this::convertInfo)
-                .toList();
+        try {
+            return this.compagnierepo.findAll().stream()
+                    .map(this::convertInfo)
+                    .toList();
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
     public CompagnieInfoResponse getCompagnie(@PathVariable String id) {
-        Compagnie compagnie = this.compagnierepo.findById(id).orElseThrow();
-        return this.convertInfo(compagnie);
+        try {
+            Compagnie compagnie = this.compagnierepo.findById(id).orElseThrow();
+            return this.convertInfo(compagnie);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CompagnieInfoResponse createCompagnie(@Valid @RequestBody CreateOrUpdateCompagnieRequest request) {
-        Compagnie compagnie = new Compagnie();
+        try {
+            Compagnie compagnie = new Compagnie();
 
-        BeanUtils.copyProperties(request, compagnie);
+            BeanUtils.copyProperties(request, compagnie);
 
-        compagnierepo.save(compagnie);
+            compagnierepo.save(compagnie);
 
-        log.debug("Compagnie {} créée!", compagnie.getId());
+            log.debug("Compagnie {} créée!", compagnie.getId());
 
-        return this.convertInfo(compagnie);
+            return this.convertInfo(compagnie);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CompagnieInfoResponse updateCompagnie(@PathVariable String id, @Valid @RequestBody CreateOrUpdateCompagnieRequest request) {
-        Compagnie compagnie = this.compagnierepo.findById(id).orElseThrow();
+        try {
+            Compagnie compagnie = this.compagnierepo.findById(id).orElseThrow();
 
-        BeanUtils.copyProperties(request, compagnie);
+            BeanUtils.copyProperties(request, compagnie);
 
-        compagnierepo.save(compagnie);
+            compagnierepo.save(compagnie);
 
-        log.debug("Compagnie {} mise à jour!", compagnie.getId());
+            log.debug("Compagnie {} mise à jour!", compagnie.getId());
 
-        return this.convertInfo(compagnie);
+            return this.convertInfo(compagnie);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
 
@@ -74,8 +95,13 @@ public class CompagnieApiController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteCompagnie(@PathVariable String id) {
-        Compagnie compagnie = this.compagnierepo.findById(id).orElseThrow();
-        this.compagnierepo.delete(compagnie);
+        try {
+            Compagnie compagnie = this.compagnierepo.findById(id).orElseThrow();
+            this.compagnierepo.delete(compagnie);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
     }
 
 
