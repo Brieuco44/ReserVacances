@@ -65,7 +65,7 @@ public class VolApiController {
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("isAuthenticated()")
+    // Visisble par tous le monde
     public Iterable<VolInfoResponse> searchVol(@RequestParam String dateDebut, @RequestParam String dateFin) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
