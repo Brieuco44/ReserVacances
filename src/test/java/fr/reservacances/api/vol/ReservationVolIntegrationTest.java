@@ -15,11 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest
 @AutoConfigureMockMvc
 class ReservationVolIntegrationTest {
-    private static final String VIDEO_ID = "video1";
-    private static final String COMMENT_ID = "com1";
-    
-    private static final String ENDPOINT = "/api/comment/" + VIDEO_ID;
-    private static final String ENDPOINT_BY_ID = ENDPOINT + "/" + COMMENT_ID;
+
 
     @Autowired
     private MockMvc mockMvc;
