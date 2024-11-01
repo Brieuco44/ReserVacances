@@ -38,3 +38,4 @@ VALUES ('cb227084-0bd5-4402-942f-169d00e0997b', 'Paris', 'cb227084-0bd5-4402-942
        ('c71f73bc-650c-43d5-a6ef-9167658eb5b9', 'Madrid', '4bfa2c9e-1485-4a52-9c6c-88132fcd0496'),  -- Spain
        ('9e1cb3b0-8b8a-4489-8aa8-0b0a0b2aab5d', 'São Paulo', '9e1cb3b0-8b8a-4489-8aa8-0b0a0b2aab5d'),  -- Brazil
        ('6632f78e-4a7b-4205-bc68-182ea25bc59b', 'Moscow', '6632f78e-4a7b-4205-bc68-182ea25bc59b');  -- Russia
+

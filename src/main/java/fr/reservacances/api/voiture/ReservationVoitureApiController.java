@@ -73,7 +73,7 @@ public class ReservationVoitureApiController {
                 .toList();
     }
 
-    @GetMapping
+    @GetMapping("/utilisateur/{id}")
     public List<ReservationVoitureResponse> findAllByUtilisateur(Authentication authentication) {
         Utilisateur utilisateur = utilisateurRepository.findById(authentication.getPrincipal().toString()).orElseThrow(UtilisateurNotFoundException::new);
         return this.repository.findAllByUtilisateur(utilisateur)

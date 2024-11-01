@@ -14,5 +14,4 @@ public class ReservationHotelResponse {
     private String dateFin;
     private String chambreId;
     private String clientId;
-    private String hotelId;
 }
