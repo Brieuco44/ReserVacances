@@ -38,7 +38,7 @@ public class VolApiController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public Iterable<VolInfoResponse> getVol() {
         try {
             return this.volRepository.findAll().stream()
@@ -52,7 +52,7 @@ public class VolApiController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public VolInfoResponse getVol(@PathVariable String id) {
         try {
             Vol vol = this.volRepository.findById(id).orElseThrow();
@@ -65,7 +65,7 @@ public class VolApiController {
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public Iterable<VolInfoResponse> searchVol(@RequestParam String dateDebut, @RequestParam String dateFin) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -86,7 +86,7 @@ public class VolApiController {
     // get nb places restantes
     @GetMapping("/places/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public int getPlacesRestantes(@PathVariable String id) {
         try {
             Vol vol = this.volRepository.findById(id).orElseThrow();
@@ -100,7 +100,7 @@ public class VolApiController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public VolInfoResponse createVol(@Valid @RequestBody CreateOrUpdateVolRequest request) {
         try {
             Vol vol = new Vol();

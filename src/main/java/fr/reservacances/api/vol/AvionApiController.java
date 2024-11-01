@@ -35,7 +35,7 @@ public class AvionApiController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    @PreAuthorize("isAuthenticated()")
     public Iterable<AvionInfoResponse> getAvions() {
         try {
             return this.avionrepository.findAll().stream()
@@ -49,7 +49,7 @@ public class AvionApiController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    @PreAuthorize("isAuthenticated()")
     public AvionInfoResponse getAvion(@PathVariable String id) {
         try {
             Avion avion = this.avionrepository.findById(id).orElseThrow();
@@ -62,7 +62,7 @@ public class AvionApiController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public AvionInfoResponse createAvion(@Valid @RequestBody CreateOrUpdateAvionRequest request) {
         try {
             Avion avion = new Avion();
@@ -80,7 +80,7 @@ public class AvionApiController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public AvionInfoResponse updateAvion(@PathVariable String id, @Valid @RequestBody CreateOrUpdateAvionRequest request) {
         try {
             Avion avion = this.avionrepository.findById(id).orElseThrow();
@@ -99,7 +99,7 @@ public class AvionApiController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public void deleteAvion(@PathVariable String id) {
         try {
             Avion avion = this.avionrepository.findById(id).orElseThrow();

@@ -26,7 +26,7 @@ public class AeroportApiController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    @PreAuthorize("isAuthenticated()")
     public Iterable<AeroportInfoResponse> getAeroports() {
         try {
             return this.aeroport.findAll().stream()
@@ -40,7 +40,7 @@ public class AeroportApiController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    @PreAuthorize("isAuthenticated()")
     public AeroportInfoResponse getAeroport(@PathVariable String id) {
         try {
             Aeroport aeroport = this.aeroport.findById(id).orElseThrow();
@@ -53,7 +53,7 @@ public class AeroportApiController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public AeroportInfoResponse createAeroport(@Valid @RequestBody CreateOrUpdateAeroportRequest request) {
         try{
             Aeroport aeroport = new Aeroport();
@@ -77,7 +77,7 @@ public class AeroportApiController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public AeroportInfoResponse updateAeroport(@PathVariable String id, @Valid @RequestBody CreateOrUpdateAeroportRequest request) {
         try{
             Aeroport aeroport = this.aeroport.findById(id).orElseThrow();

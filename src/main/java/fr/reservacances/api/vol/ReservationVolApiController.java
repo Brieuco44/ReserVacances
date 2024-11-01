@@ -37,7 +37,7 @@ public class ReservationVolApiController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ReservationVolInfoResponse createReservation(@Valid @RequestBody CreateOrUpdateReservationVolRequest request) {
         try{
             // verify that stay places are available
@@ -74,7 +74,7 @@ public class ReservationVolApiController {
 
     @GetMapping("/nbplaces/{volId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public Integer getNbPlacesAvailable(@PathVariable String volId) {
         try{
             // Get model nb places available by vol id
@@ -94,7 +94,7 @@ public class ReservationVolApiController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public void deleteReservation(@PathVariable String id) {
         try{
             // Delete the reservation by id and verify that the user is the owner of the reservation

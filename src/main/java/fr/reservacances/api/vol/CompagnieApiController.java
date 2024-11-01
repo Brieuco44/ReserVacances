@@ -25,7 +25,7 @@ public class CompagnieApiController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    @PreAuthorize("isAuthenticated()")
     public Iterable<CompagnieInfoResponse> getCompagnies() {
         try {
             return this.compagnierepo.findAll().stream()
@@ -39,7 +39,7 @@ public class CompagnieApiController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    @PreAuthorize("isAuthenticated()")
     public CompagnieInfoResponse getCompagnie(@PathVariable String id) {
         try {
             Compagnie compagnie = this.compagnierepo.findById(id).orElseThrow();
@@ -52,7 +52,7 @@ public class CompagnieApiController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public CompagnieInfoResponse createCompagnie(@Valid @RequestBody CreateOrUpdateCompagnieRequest request) {
         try {
             Compagnie compagnie = new Compagnie();
@@ -72,7 +72,7 @@ public class CompagnieApiController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public CompagnieInfoResponse updateCompagnie(@PathVariable String id, @Valid @RequestBody CreateOrUpdateCompagnieRequest request) {
         try {
             Compagnie compagnie = this.compagnierepo.findById(id).orElseThrow();
@@ -93,7 +93,7 @@ public class CompagnieApiController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public void deleteCompagnie(@PathVariable String id) {
         try {
             Compagnie compagnie = this.compagnierepo.findById(id).orElseThrow();

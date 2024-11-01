@@ -24,7 +24,7 @@ public class ModelAvionApiController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    @PreAuthorize("isAuthenticated()")
     public Iterable<ModelAvionInfoResponse> getModelAvions() {
         try {
             return this.modeleavionrepo.findAll().stream()
@@ -38,7 +38,7 @@ public class ModelAvionApiController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    //@PreAuthorize("hasRole('ROLE_ADMIN')") // A voir si on le laisse ou pas
+    @PreAuthorize("isAuthenticated()")
     public ModelAvionInfoResponse getModelAvion(@PathVariable String id) {
         try {
             ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
@@ -51,7 +51,7 @@ public class ModelAvionApiController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public ModelAvionInfoResponse createModelAvion(@Valid @RequestBody CreateOrUpdateAvionModelRequest request) {
         try {
             ModeleAvion modeleAvion = new ModeleAvion();
@@ -71,7 +71,7 @@ public class ModelAvionApiController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public ModelAvionInfoResponse updateModelAvion(@PathVariable String id, @Valid @RequestBody CreateOrUpdateAvionModelRequest request) {
         try {
             ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
@@ -92,7 +92,7 @@ public class ModelAvionApiController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
     public void deleteModelAvion(@PathVariable String id) {
         try {
             ModeleAvion modeleAvion = this.modeleavionrepo.findById(id).orElseThrow();
