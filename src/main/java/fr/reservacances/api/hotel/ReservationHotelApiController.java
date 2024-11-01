@@ -66,10 +66,11 @@ public class ReservationHotelApiController {
     }
 
     @GetMapping("/hotel/{hotelId}")
-    public List<ReservationHotelResponse> findByHotelId(@PathVariable String hotelId) {
-        log.debug("Recherche des reservations de l'hotel {} ...", hotelId);
+    public List<ReservationHotelResponse> findByChambreId(@PathVariable String chambreId) {
+        log.debug("Recherche des reservations de la chambre {} ...", chambreId);
 
-        return this.reservationHotelRepository.findByHotelId(hotelId)
+
+        return this.reservationHotelRepository.findByChambreId(chambreId)
                 .stream()
                 .map(this::convert)
                 .toList();
@@ -91,15 +92,15 @@ public class ReservationHotelApiController {
                 .orElseThrow(UtilisateurNotFoundException::new);
         Chambre chambre = this.chambreRepository.findById(request.getChambreId())
                 .orElseThrow(ChambreNotFoundException::new);
-        List<ReservationHotel> reservationsExistantes = reservationHotelRepository.findReservationsByChambreAndDate(
-                request.getChambreId(),
-                request.getDateDebut(),
-                request.getDateFin());
+        // List<ReservationHotel> reservationsExistantes = reservationHotelRepository.findReservationsByChambreAndDate(
+        //         request.getChambreId(),
+        //         request.getDateDebut(),
+        //         request.getDateFin());
 
-        if (!reservationsExistantes.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("La chambre est déjà réservée pour la période sélectionnée.").toString();
-        }
+        // if (!reservationsExistantes.isEmpty()) {
+        //     return ResponseEntity.status(HttpStatus.CONFLICT)
+        //             .body("La chambre est déjà réservée pour la période sélectionnée.").toString();
+        // }
 
         BeanUtils.copyProperties(request, reservationHotel);
         reservationHotel.setUtilisateur(utilisateur);
@@ -122,15 +123,15 @@ public class ReservationHotelApiController {
                 .orElseThrow(ChambreNotFoundException::new);
         Utilisateur utilisateur = this.utilisateurRepository.findById(authentication.getPrincipal().toString())
                 .orElseThrow(UtilisateurNotFoundException::new);
-        List<ReservationHotel> reservationsExistantes = reservationHotelRepository.findReservationsByChambreAndDate(
-                request.getChambreId(),
-                request.getDateDebut(),
-                request.getDateFin());
+        // List<ReservationHotel> reservationsExistantes = reservationHotelRepository.findReservationsByChambreAndDate(
+        //         request.getChambreId(),
+        //         request.getDateDebut(),
+        //         request.getDateFin());
 
-        if (!reservationsExistantes.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("La chambre est déjà réservée pour la période sélectionnée.").toString();
-        }
+        // if (!reservationsExistantes.isEmpty()) {
+        //     return ResponseEntity.status(HttpStatus.CONFLICT)
+        //             .body("La chambre est déjà réservée pour la période sélectionnée.").toString();
+        // }
 
         BeanUtils.copyProperties(request, reservationHotel);
         reservationHotel.setUtilisateur(utilisateur);

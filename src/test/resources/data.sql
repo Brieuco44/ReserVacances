@@ -20,3 +20,12 @@ VALUES  ('Ville1', 'Bonchamp', 'Pays1');
 
 INSERT INTO voiture (id, prix, modele_id, ville_id)
 VALUES  ('role1', 5000, 'ModeleVoiture1','Ville1');
+
+-- Insertion des hôtels de test
+INSERT INTO hotel (id, nom, ville_id) VALUES ('Hotel1', 'Hotel Test 1', 'Ville1'), ('Hotel2', 'Hotel Test 2', 'Ville1');
+
+-- Insertion des chambres de test
+INSERT INTO chambre (id, nb_place, numero,  prix, hotel_id) VALUES
+('Chambre1', 2, '101', 100.0, 'Hotel1'),
+('Chambre2', 3, '102', 150.0, 'Hotel1'),
+('Chambre3', 2, '201', 120.0, 'Hotel2');
