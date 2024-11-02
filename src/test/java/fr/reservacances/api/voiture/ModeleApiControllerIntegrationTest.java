@@ -6,7 +6,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -14,18 +13,18 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import fr.reservacances.TestUtil;
-import fr.reservacances.request.voiture.CreateOrUpdateMarqueRequest;
+import fr.reservacances.request.voiture.CreateOrUpdateModeleVoitureRequest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "classpath:/voiture.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
-public class MarqueApiControllerIntegrationTest {
-
-    private static final String ENDPOINT = "/api/marque";
+public class ModeleApiControllerIntegrationTest {
+    private static final String ENDPOINT = "/api/modele/voiture";
     private static final String ENDPOINT_ID = ENDPOINT + "/{id}";
 
-    private static final String VILLE_ID = "Paris";
+    private static final String NOM = "Alpine A110";
     private static final String MARQUE_ID = "Alpine";
+    private static final String MODELE_ID = "Alpine A110";
 
 
     @Autowired
@@ -44,13 +43,14 @@ public class MarqueApiControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    // CREATE
+    // // CREATE
     @Test
     void shouldCreateStatusForbidden() throws Exception {
         // given
-        CreateOrUpdateMarqueRequest request = CreateOrUpdateMarqueRequest.builder()
-                .nom("Ville non mise à jour (forbidden)")
-                .villeId(VILLE_ID)
+        CreateOrUpdateModeleVoitureRequest request = CreateOrUpdateModeleVoitureRequest.builder()
+                .nom(NOM)
+                .nbPlace(5)
+                .marqueId(MARQUE_ID)
                 .build();
 
         // when
@@ -68,9 +68,10 @@ public class MarqueApiControllerIntegrationTest {
     @WithMockUser(roles = "CAR_MANAGER")
     void shouldCreateStatusCreated() throws Exception {
         // given
-        CreateOrUpdateMarqueRequest request = CreateOrUpdateMarqueRequest.builder()
-                .nom("Ville créée")
-                .villeId(VILLE_ID)
+        CreateOrUpdateModeleVoitureRequest request = CreateOrUpdateModeleVoitureRequest.builder()
+                .nom(NOM)
+                .nbPlace(5)
+                .marqueId(MARQUE_ID)
                 .build();
 
         // when
@@ -84,19 +85,20 @@ public class MarqueApiControllerIntegrationTest {
         result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
-    // UPDATE
+    // // UPDATE
     @Test
     void shouldUpdateStatusForbidden() throws Exception {
         // given
-        CreateOrUpdateMarqueRequest request = CreateOrUpdateMarqueRequest.builder()
-                .nom("Ville non mise à jour (forbidden)")
-                .villeId(VILLE_ID)
+        CreateOrUpdateModeleVoitureRequest request = CreateOrUpdateModeleVoitureRequest.builder()
+                .nom(NOM)
+                .nbPlace(5)
+                .marqueId(MARQUE_ID)
                 .build();
 
         // when
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders
-                        .put(ENDPOINT_ID, MARQUE_ID)
+                        .put(ENDPOINT_ID, MODELE_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(TestUtil.json(request)));
 
@@ -108,15 +110,16 @@ public class MarqueApiControllerIntegrationTest {
     @WithMockUser(roles = "CAR_MANAGER")
     void shouldUpdateStatusCreated() throws Exception {
         // given
-        CreateOrUpdateMarqueRequest request = CreateOrUpdateMarqueRequest.builder()
-                .nom("Ville non mise à jour (forbidden)")
-                .villeId(VILLE_ID)
+        CreateOrUpdateModeleVoitureRequest request = CreateOrUpdateModeleVoitureRequest.builder()
+                .nom(NOM)
+                .nbPlace(5)
+                .marqueId(MARQUE_ID)
                 .build();
 
         // when
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders
-                        .put(ENDPOINT_ID, MARQUE_ID)
+                        .put(ENDPOINT_ID, MODELE_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(TestUtil.json(request)));
 

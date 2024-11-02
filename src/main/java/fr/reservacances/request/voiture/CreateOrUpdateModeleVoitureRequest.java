@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class CreateOrUpdateModeleVoiture {
+public class CreateOrUpdateModeleVoitureRequest {
 
     @NotBlank
     public String nom;

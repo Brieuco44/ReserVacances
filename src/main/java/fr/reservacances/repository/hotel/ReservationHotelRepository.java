@@ -12,7 +12,9 @@ import fr.reservacances.model.hotel.ReservationHotel;
 
 @Repository
 public interface ReservationHotelRepository extends JpaRepository<ReservationHotel, String> {
+
         List<ReservationHotel> findByChambreId(String chambreId);
+
 
         // @Query("SELECT r FROM Reservation r WHERE r.chambre.id = :chambreId " +
         //                 "AND r.dateDebut < :dateFin " +
