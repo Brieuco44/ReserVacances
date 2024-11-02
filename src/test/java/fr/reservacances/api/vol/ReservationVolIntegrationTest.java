@@ -34,7 +34,6 @@ class ReservationVolIntegrationTest {
     private static final int NB_ENFANTS = 2;
     private static final int NB_ADULTES = 2;
 
-
     @Autowired
     private MockMvc mockMvc;
 
