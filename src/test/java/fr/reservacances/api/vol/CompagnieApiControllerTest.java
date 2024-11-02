@@ -1,5 +1,7 @@
-package fr.reservacances.api.voiture;
+package fr.reservacances.api.vol;
 
+import fr.reservacances.TestUtil;
+import fr.reservacances.request.vol.CreateOrUpdateCompagnieRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,115 +15,105 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import fr.reservacances.TestUtil;
-import fr.reservacances.request.voiture.CreateOrUpdateMarqueRequest;
-
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:/voiture.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
-public class MarqueApiControllerIntegrationTest {
+@Sql(scripts = "classpath:/vol.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+public class CompagnieApiControllerTest {
 
-    private static final String ENDPOINT = "/api/marque";
+    private static final String ENDPOINT = "/api/vol/compagnie";
     private static final String ENDPOINT_ID = ENDPOINT + "/{id}";
 
-    private static final String VILLE_ID = "Paris";
-    private static final String MARQUE_ID = "Alpine";
-
+    private static final String COMPAGNIE_ID = "a26cb918-3d9c-49c8-9c79-3cde3eab0b6f";
 
     @Autowired
     private MockMvc mockMvc;
 
-    // GET
-    @Test
-    void shouldFindAllStatusOk() throws Exception {
-        // given
+    // Helper method to build request objects
+    private CreateOrUpdateCompagnieRequest buildRequest(String compagniName){
+        CreateOrUpdateCompagnieRequest request = new CreateOrUpdateCompagnieRequest();
+        request.setNom(compagniName);
+        return request;
+    }
 
-        // when
+    // GET All
+    @Test
+    @DirtiesContext
+    void shouldFindAllStatusOk() throws Exception {
+        // Act
         ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT));
 
-        // then
-        result
-                .andExpect(MockMvcResultMatchers.status().isOk());
+        // Assert
+        result.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").isNotEmpty());
     }
 
-    // CREATE
+    // CREATE Tests
     @Test
     void shouldCreateStatusForbidden() throws Exception {
-        // given
-        CreateOrUpdateMarqueRequest request = CreateOrUpdateMarqueRequest.builder()
-                .nom("Ville non mise à jour (forbidden)")
-                .villeId(VILLE_ID)
-                .build();
+        // Arrange
+        CreateOrUpdateCompagnieRequest request = buildRequest("Ma compagnie");
 
-        // when
+        // Act
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders
                         .post(ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(TestUtil.json(request)));
+                        .content(TestUtil.json(request))
+        );
 
-        // then
+        // Assert
         result.andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    @WithMockUser(roles = "CAR_MANAGER")
+    @WithMockUser(roles = "VOL_MANAGER")
     void shouldCreateStatusCreated() throws Exception {
-        // given
-        CreateOrUpdateMarqueRequest request = CreateOrUpdateMarqueRequest.builder()
-                .nom("Ville créée")
-                .villeId(VILLE_ID)
-                .build();
-
-        // when
+        // Arrange
+        CreateOrUpdateCompagnieRequest request = buildRequest("Ma compagnie");
+        // Act
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders
                         .post(ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(TestUtil.json(request)));
+                        .content(TestUtil.json(request))
+        );
 
-        // then
-        result.andExpect(MockMvcResultMatchers.status().isCreated());
+        // Assert
+        result.andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
     }
 
-    // UPDATE
+    // UPDATE Tests
     @Test
     void shouldUpdateStatusForbidden() throws Exception {
-        // given
-        CreateOrUpdateMarqueRequest request = CreateOrUpdateMarqueRequest.builder()
-                .nom("Ville non mise à jour (forbidden)")
-                .villeId(VILLE_ID)
-                .build();
-
-        // when
+        // Arrange
+        CreateOrUpdateCompagnieRequest request = buildRequest("Ma compagnie");
+        // Act
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders
-                        .put(ENDPOINT_ID, MARQUE_ID)
+                        .put(ENDPOINT_ID, COMPAGNIE_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(TestUtil.json(request)));
+                        .content(TestUtil.json(request))
+        );
 
-        // then
+        // Assert
         result.andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    @WithMockUser(roles = "CAR_MANAGER")
-    void shouldUpdateStatusCreated() throws Exception {
-        // given
-        CreateOrUpdateMarqueRequest request = CreateOrUpdateMarqueRequest.builder()
-                .nom("Ville non mise à jour (forbidden)")
-                .villeId(VILLE_ID)
-                .build();
-
-        // when
+    @WithMockUser(roles = "VOL_MANAGER")
+    void shouldUpdateStatusOk() throws Exception {
+        // Arrange
+        CreateOrUpdateCompagnieRequest request = buildRequest("Ma compagnie");
+        // Act
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders
-                        .put(ENDPOINT_ID, MARQUE_ID)
+                        .put(ENDPOINT_ID, COMPAGNIE_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(TestUtil.json(request)));
+                        .content(TestUtil.json(request))
+        );
 
-        // then
+        // Assert
         result.andExpect(MockMvcResultMatchers.status().isOk());
     }
-
 }

@@ -35,7 +35,6 @@ public class AvionApiController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("isAuthenticated()")
     public Iterable<AvionInfoResponse> getAvions() {
         try {
             return this.avionrepository.findAll().stream()
@@ -49,7 +48,6 @@ public class AvionApiController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("isAuthenticated()")
     public AvionInfoResponse getAvion(@PathVariable String id) {
         try {
             Avion avion = this.avionrepository.findById(id).orElseThrow();

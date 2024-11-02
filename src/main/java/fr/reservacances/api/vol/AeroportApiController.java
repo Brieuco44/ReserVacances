@@ -71,6 +71,7 @@ public class AeroportApiController {
             return this.convertInfo(aeroport);
         } catch (Exception e) {
             log.error(e);
+            System.out.println(e);
             throw new ErrorThrowException();
         }
     }

@@ -9,6 +9,8 @@ INSERT INTO utilisateur (id, email, mot_de_passe, nom, prenom, telephone, role_i
 
 VALUES ('fa064aa8-80de-439e-8ab7-28084e55985c', 'admin@gmail.com', '$2a$10$ymmS9V9dtHTqCVIBmxs7s.J27iR1NvfOJY1b2BaOGN86NY6Ov9yia', 'Admin User',
         'admin', '0606060607', 'ROLE_ADMIN', 'admin'),
+       ('user', 'admin@gmail.com', '$2a$10$ymmS9V9dtHTqCVIBmxs7s.J27iR1NvfOJY1b2BaOGN86NY6Ov9yia', 'Admin User',
+        'admin', '0606060607', 'ROLE_ADMIN', 'user'),
        ('677966bb-7ab3-4e5a-8208-c1dde5d7fa5e', 'carmanager@gmail.com', '$2a$10$ymmS9V9dtHTqCVIBmxs7s.J27iR1NvfOJY1b2BaOGN86NY6Ov9yia', 'Car Manager',
         'carmanager', '0606060608', 'ROLE_CAR_MANAGER', 'carmanager'),
        ('fe7213b9-6b46-4325-bb2d-33f9c64a98bf', 'hotelmanager@gmail.com', '$2a$10$ymmS9V9dtHTqCVIBmxs7s.J27iR1NvfOJY1b2BaOGN86NY6Ov9yia',
@@ -18,7 +20,7 @@ VALUES ('fa064aa8-80de-439e-8ab7-28084e55985c', 'admin@gmail.com', '$2a$10$ymmS9
 
 INSERT INTO pays (id, nom)
 VALUES ('France', 'France'),
-       ('c63f4406-5485-47b7-a13c-443dea1de0bd', 'United States'),
+       ('USA', 'United States'),
        ('Japan', 'Japan'),
        ('Germany', 'Germany'),
        ('United Kingdom', 'United Kingdom'),
@@ -29,9 +31,8 @@ VALUES ('France', 'France'),
        ('Russia', 'Russia');
 
 INSERT INTO ville (id, nom, pays_id)
-
 VALUES ('Paris', 'Paris', 'France'),  -- France
-       ('New York', 'New York', 'c63f4406-5485-47b7-a13c-443dea1de0bd'),  -- United States
+       ('New York', 'New York', 'USA'),  -- United States
        ('Tokyo', 'Tokyo', 'Japan'),  -- Japan
        ('Berlin', 'Berlin', 'Germany'),  -- Germany
        ('London', 'London', 'United Kingdom'),  -- United Kingdom
