@@ -68,9 +68,8 @@ public class ReservationHotelApiController {
     @GetMapping("/hotel/{hotelId}")
     public List<ReservationHotelResponse> findByChambreId(@PathVariable String chambreId) {
         log.debug("Recherche des reservations de la chambre {} ...", chambreId);
-
-
         return this.reservationHotelRepository.findByChambreId(chambreId)
+
                 .stream()
                 .map(this::convert)
                 .toList();

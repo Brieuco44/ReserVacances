@@ -4,12 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
-
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,7 +46,6 @@ public class MarqueApiController {
 
     @GetMapping
     public List<MarqueResponse> findAll() {
-
         return this.repository.findAll()
                 .stream()
                 .map(this::convert)
@@ -59,7 +55,6 @@ public class MarqueApiController {
     @GetMapping("/{id}")
     public MarqueResponse findById(@PathVariable String id) {
         Marque marque = this.repository.findById(id).orElseThrow(MarqueNotFoundException::new);
-
         return MarqueResponse.builder()
                 .id(id)
                 .nom(marque.getNom())
@@ -73,13 +68,6 @@ public class MarqueApiController {
         BeanUtils.copyProperties(request, marque);
         log.debug("Marque {} mise à jour!", id);
         return marque.getId();
-    }
-
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_CAR_MANAGER')")
-    public void deleteById(@PathVariable String id) {
-        this.repository.deleteById(id);
-        log.debug("Marque {} supprimée!", id);
     }
 
     private MarqueResponse convert(Marque marque) {
