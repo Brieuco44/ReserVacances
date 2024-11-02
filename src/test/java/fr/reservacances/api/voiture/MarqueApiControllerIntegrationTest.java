@@ -6,8 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.DirtiesContext;
+
 import org.springframework.test.context.jdbc.Sql;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -19,6 +20,7 @@ import fr.reservacances.request.voiture.CreateOrUpdateMarqueRequest;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "classpath:/voiture.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+
 public class MarqueApiControllerIntegrationTest {
 
     private static final String ENDPOINT = "/api/marque";
@@ -27,12 +29,12 @@ public class MarqueApiControllerIntegrationTest {
     private static final String VILLE_ID = "Paris";
     private static final String MARQUE_ID = "Alpine";
 
+
     @Autowired
     private MockMvc mockMvc;
 
     // GET
     @Test
-    @DirtiesContext
     void shouldFindAllStatusOk() throws Exception {
         // given
 

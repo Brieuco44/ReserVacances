@@ -21,6 +21,7 @@ public class CreateOrUpdateReservationVoitureRequest {
   
     @NotNull(message = "La date de début ne peut pas être nulle")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+
     public LocalDateTime dateDebut;
 
     @NotNull(message = "La date de fin ne peut pas être nulle")

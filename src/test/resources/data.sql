@@ -6,6 +6,7 @@ INSERT INTO role (id, nom) VALUES
 ('ROLE_VOL_MANAGER', 'ROLE_VOL_MANAGER');
 
 INSERT INTO utilisateur (id, email, mot_de_passe, nom, prenom, telephone, role_id, username)
+
 VALUES ('fa064aa8-80de-439e-8ab7-28084e55985c', 'admin@gmail.com', '$2a$10$ymmS9V9dtHTqCVIBmxs7s.J27iR1NvfOJY1b2BaOGN86NY6Ov9yia', 'Admin User',
         'admin', '0606060607', 'ROLE_ADMIN', 'admin'),
        ('677966bb-7ab3-4e5a-8208-c1dde5d7fa5e', 'carmanager@gmail.com', '$2a$10$ymmS9V9dtHTqCVIBmxs7s.J27iR1NvfOJY1b2BaOGN86NY6Ov9yia', 'Car Manager',

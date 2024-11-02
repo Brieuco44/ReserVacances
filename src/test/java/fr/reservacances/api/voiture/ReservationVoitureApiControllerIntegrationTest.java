@@ -1,7 +1,6 @@
 package fr.reservacances.api.voiture;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import lombok.extern.log4j.Log4j2;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "classpath:/voiture.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
-@Log4j2
 public class ReservationVoitureApiControllerIntegrationTest {
     private static final String ENDPOINT = "/api/reservation/voiture";
     private static final String ENDPOINT_ALL = ENDPOINT + "/all";
