@@ -1,6 +1,5 @@
 INSERT INTO modele_avion (id, nb_place, nom)
-VALUES ('4a8f91e6-5670-44f6-a469-341fa9d65c3d', 350, 'Airbus A380'),
-       ('5b9a27f7-6781-4af9-8f0a-4d8a6c77c8e1', 180, 'Boeing 737'),
+VALUES ('5b9a27f7-6781-4af9-8f0a-4d8a6c77c8e1', 180, 'Boeing 737'),
        ('6c1a38e8-7892-4bf9-9a1b-5e9b7d88d9f2', 215, 'Airbus A320'),
        ('7d2a49f9-8903-4cf9-9b2c-6f0c8e99e0f3', 314, 'Boeing 777'),
        ('8e3a5af0-9014-4df9-9c3d-7g1d9fa1f104', 160, 'Embraer E195'),
@@ -53,7 +52,7 @@ VALUES ('a26cb918-3d9c-49c8-9c79-3cde3eab0b6f', 'Lufthansa'),
        ('h93ij68f-0kgj-4gj8-9j7g-0jki0lgi7i3j', 'Qatar Airways');
 
 INSERT INTO reservacances.modele_avion (id, nb_place, nom)
-VALUES ('4a8f91e6-5670-44f6-a469-341fa9d65c3d', 350, 'A380'),            -- Airbus A380
+VALUES
        ('dca5c614-63e6-4df1-a6a5-604256d78f35', 200, 'A320'),            -- Airbus A320
        ('7d5e504c-5fa1-4978-b8c5-8c5c2c129a2f', 250, 'Boeing 737'),      -- Boeing 737
        ('b3cbe71c-d61e-4a14-a09b-63774b3d1a11', 300, 'Boeing 787'),      -- Boeing 787

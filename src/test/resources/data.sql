@@ -28,8 +28,8 @@ VALUES ('cb227084-0bd5-4402-942f-169d00e0997b', 'France'),
        ('6632f78e-4a7b-4205-bc68-182ea25bc59b', 'Russia');
 
 INSERT INTO ville (id, nom, pays_id)
-VALUES ('cb227084-0bd5-4402-942f-169d00e0997b', 'Paris', 'cb227084-0bd5-4402-942f-169d00e0997b'),  -- France
-       ('c63f4406-5485-47b7-a13c-443dea1de0bd', 'New York', 'c63f4406-5485-47b7-a13c-443dea1de0bd'),  -- United States
+VALUES ('cb227084-0bd5-4402-942f-169d00e0998b', 'Paris', 'cb227084-0bd5-4402-942f-169d00e0997b'),  -- France
+       ('c63f4406-5485-47b7-a13c-443dea1de1bd', 'New York', 'c63f4406-5485-47b7-a13c-443dea1de0bd'),  -- United States
        ('2e6d8f2b-4c1c-4bc3-ae63-7e06243a54b4', 'Tokyo', '2e6d8f2b-4c1c-4bc3-ae63-7e06243a54b4'),  -- Japan
        ('3c87c432-dc29-4abf-bbcb-b7cdb3a4d1b1', 'Berlin', '3c87c432-dc29-4abf-bbcb-b7cdb3a4d1b1'),  -- Germany
        ('4bfa2c9e-1485-4a52-9c6c-88132fcd0496', 'London', '4bfa2c9e-1485-4a52-9c6c-88132fcd0496'),  -- United Kingdom
