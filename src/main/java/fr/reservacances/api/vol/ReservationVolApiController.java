@@ -2,21 +2,14 @@ package fr.reservacances.api.vol;
 
 import fr.reservacances.exception.ErrorThrowException;
 import fr.reservacances.exception.vol.NotEnouthPlaceException;
-import fr.reservacances.model.localisation.Pays;
-import fr.reservacances.model.localisation.Ville;
 import fr.reservacances.model.utilisateur.Utilisateur;
 import fr.reservacances.model.vol.Aeroport;
 import fr.reservacances.model.vol.ModeleAvion;
 import fr.reservacances.model.vol.ReservationVol;
 import fr.reservacances.model.vol.Vol;
-import fr.reservacances.repository.localisation.VilleRepository;
-import fr.reservacances.repository.vol.AeroportRepository;
-import fr.reservacances.repository.vol.ModelAvionRepository;
 import fr.reservacances.repository.vol.ReservationVolRepository;
 import fr.reservacances.repository.vol.VolRepository;
-import fr.reservacances.request.vol.CreateOrUpdateAeroportRequest;
 import fr.reservacances.request.vol.CreateOrUpdateReservationVolRequest;
-import fr.reservacances.response.vol.AeroportInfoResponse;
 import fr.reservacances.response.vol.ReservationVolInfoResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +45,9 @@ public class ReservationVolApiController {
             BeanUtils.copyProperties(request, reservationVol);
 
             String utilisateurid = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            System.out.println("utilisateurid: " + utilisateurid);
+
             Utilisateur utilisateur = new Utilisateur();
             utilisateur.setId(utilisateurid);
 
@@ -68,11 +64,12 @@ public class ReservationVolApiController {
             return convertInfo(reservationVol);
         } catch (Exception e) {
             log.error(e);
-            throw new ErrorThrowException();
+            //throw new ErrorThrowException();
+            throw new RuntimeException(e);
         }
     }
 
-    @GetMapping("/nbplaces/{volId}")
+    @GetMapping("/nbplaces/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("isAuthenticated()")
     public Integer getNbPlacesAvailable(@PathVariable String volId) {
@@ -86,6 +83,33 @@ public class ReservationVolApiController {
             Integer nbPlacesReserved = this.reservationVolRepository.getTotalPlacesByVolId(volId);
 
             return nbPlaces - nbPlacesReserved;
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("isAuthenticated()")
+    public ReservationVolInfoResponse updateReservation(@PathVariable String id, @Valid @RequestBody CreateOrUpdateReservationVolRequest request) {
+        try{
+            // Update the reservation by id and verify that the user is the owner of the reservation
+            String utilisateurid = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            ReservationVol reservationVol = this.reservationVolRepository.findById(id).orElseThrow();
+
+            if (!reservationVol.getUtilisateur().getId().equals(utilisateurid)) {
+                throw new RuntimeException("You are not the owner of this reservation");
+            }
+
+            BeanUtils.copyProperties(request, reservationVol);
+
+            this.reservationVolRepository.save(reservationVol);
+
+            log.debug("ReservationVol {} mise à jour!", reservationVol.getId());
+
+            return convertInfo(reservationVol);
         } catch (Exception e) {
             log.error(e);
             throw new ErrorThrowException();

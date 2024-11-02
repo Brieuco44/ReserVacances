@@ -25,7 +25,6 @@ public class CompagnieApiController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("isAuthenticated()")
     public Iterable<CompagnieInfoResponse> getCompagnies() {
         try {
             return this.compagnierepo.findAll().stream()
@@ -39,7 +38,6 @@ public class CompagnieApiController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("isAuthenticated()")
     public CompagnieInfoResponse getCompagnie(@PathVariable String id) {
         try {
             Compagnie compagnie = this.compagnierepo.findById(id).orElseThrow();

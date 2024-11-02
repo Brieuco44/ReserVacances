@@ -9,5 +9,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 @WithSecurityContext(factory = WithMockUserIdSecurityContextFactory.class)
 public @interface WithMockUserId {
-    String value() default "user1";
+    String value() default "fa064aa8-80de-439e-8ab7-28084e55985c";
 }

@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @SpringBootTest
 class JpaUserDetailsServiceIntegrationTest {
-    private static final String USER_USERNAME = "user1";
+    private static final String USER_USERNAME = "admin";
 
     @Autowired
     private JpaUserDetailsService service;
@@ -20,7 +20,7 @@ class JpaUserDetailsServiceIntegrationTest {
         // given
 
         // when
-        UserDetails result = this.service.loadUserByUsername("user1");
+        UserDetails result = this.service.loadUserByUsername("admin");
 
         // then
         Assertions.assertEquals(USER_USERNAME, result.getUsername());
