@@ -29,6 +29,7 @@ VALUES ('France', 'France'),
        ('Russia', 'Russia');
 
 INSERT INTO ville (id, nom, pays_id)
+
 VALUES ('Paris', 'Paris', 'France'),  -- France
        ('New York', 'New York', 'c63f4406-5485-47b7-a13c-443dea1de0bd'),  -- United States
        ('Tokyo', 'Tokyo', 'Japan'),  -- Japan
@@ -39,4 +40,5 @@ VALUES ('Paris', 'Paris', 'France'),  -- France
        ('Madrid', 'Madrid', 'Spain'),  -- Spain
        ('São Paulo', 'São Paulo', 'Brazil'),  -- Brazil
        ('Moscow', 'Moscow', 'Russia');  -- Russia
+
 
