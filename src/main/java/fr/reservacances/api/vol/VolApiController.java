@@ -1,18 +1,13 @@
 package fr.reservacances.api.vol;
 
 import fr.reservacances.exception.ErrorThrowException;
-import fr.reservacances.model.localisation.Pays;
-import fr.reservacances.model.localisation.Ville;
 import fr.reservacances.model.vol.*;
-import fr.reservacances.repository.localisation.VilleRepository;
 import fr.reservacances.repository.vol.AeroportRepository;
 import fr.reservacances.repository.vol.AvionRepository;
 import fr.reservacances.repository.vol.VolRepository;
-import fr.reservacances.request.vol.CreateOrUpdateAvionModelRequest;
 import fr.reservacances.request.vol.CreateOrUpdateVolRequest;
 import fr.reservacances.response.vol.AeroportInfoResponse;
 import fr.reservacances.response.vol.AvionInfoResponse;
-import fr.reservacances.response.vol.ModelAvionInfoResponse;
 import fr.reservacances.response.vol.VolInfoResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,5 @@
 package fr.reservacances.request.vol;
 
-import fr.reservacances.validator.ValidDateRange;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

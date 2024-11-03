@@ -5,7 +5,6 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class DateRangeValidator implements ConstraintValidator<ValidDateRange, CreateOrUpdateVolRequest> {
 

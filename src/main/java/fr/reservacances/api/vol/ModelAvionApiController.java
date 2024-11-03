@@ -1,11 +1,9 @@
 package fr.reservacances.api.vol;
 
 import fr.reservacances.exception.ErrorThrowException;
-import fr.reservacances.model.vol.Avion;
 import fr.reservacances.model.vol.ModeleAvion;
 import fr.reservacances.repository.vol.ModelAvionRepository;
 import fr.reservacances.request.vol.CreateOrUpdateAvionModelRequest;
-import fr.reservacances.request.vol.CreateOrUpdateAvionRequest;
 import fr.reservacances.response.vol.ModelAvionInfoResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

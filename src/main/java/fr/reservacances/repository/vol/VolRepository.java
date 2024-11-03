@@ -1,8 +1,6 @@
 package fr.reservacances.repository.vol;
 
-import fr.reservacances.model.vol.ReservationVol;
 import fr.reservacances.model.vol.Vol;
-import org.springframework.beans.PropertyValues;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
