@@ -22,6 +22,7 @@ import fr.reservacances.request.voiture.CreateOrUpdateReservationVoitureRequest;
 @AutoConfigureMockMvc
 @Sql(scripts = "classpath:/voiture.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class ReservationVoitureApiControllerIntegrationTest {
+
         private static final String ENDPOINT = "/api/reservation/voiture";
         private static final String ENDPOINT_ALL = ENDPOINT + "/all";
         private static final String ENDPOINT_ID = ENDPOINT + "/{id}";
