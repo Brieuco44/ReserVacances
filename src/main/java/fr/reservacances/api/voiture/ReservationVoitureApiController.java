@@ -44,7 +44,7 @@ public class ReservationVoitureApiController {
     private final UtilisateurRepository utilisateurRepository;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.CREATED)
     public String create(@Valid @RequestBody CreateOrUpdateReservationVoitureRequest request,
             Authentication authentication) {
@@ -107,6 +107,7 @@ public class ReservationVoitureApiController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String update(@PathVariable String id, @Valid @RequestBody CreateOrUpdateReservationVoitureRequest request, Authentication authentication) {
         ReservationVoiture reservationVoiture = this.repository.findById(id)
                 .orElseThrow(ReservationVoitureNotFoundException::new);
@@ -122,6 +123,7 @@ public class ReservationVoitureApiController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public void deleteById(@PathVariable String id, Authentication authentication) {
         ReservationVoiture reservationVoiture = this.repository.findById(id).orElseThrow(ReservationVoitureNotFoundException::new);
         Utilisateur utilisateur = utilisateurRepository.findById(authentication.getPrincipal().toString()).orElseThrow(UtilisateurNotFoundException::new);
