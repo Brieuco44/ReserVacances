@@ -1,40 +1,21 @@
 package fr.reservacances.api.vol;
 
 import fr.reservacances.TestUtil;
-import fr.reservacances.exception.EntityNotFoundException;
-import fr.reservacances.repository.vol.ModelAvionRepository;
-import fr.reservacances.request.voiture.CreateOrUpdateMarqueRequest;
 import fr.reservacances.request.vol.CreateOrUpdateAvionRequest;
-import fr.reservacances.response.vol.AvionInfoResponse;
-import fr.reservacances.repository.vol.CompagnieRepository;
-import fr.reservacances.repository.vol.AvionRepository;
-import fr.reservacances.model.vol.ModeleAvion;
-import fr.reservacances.model.vol.Compagnie;
-import fr.reservacances.model.vol.Avion;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.*;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:/vol.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class AvionApiControllerTest {
 
     private static final String ENDPOINT = "/api/vol/avion";
@@ -48,9 +29,9 @@ public class AvionApiControllerTest {
     private MockMvc mockMvc;
 
     // Helper method to build request objects
-    private CreateOrUpdateAvionRequest buildRequest(String modeleAvionId, String compagnieId) {
+    private CreateOrUpdateAvionRequest buildRequest(String compagnieId) {
         return CreateOrUpdateAvionRequest.builder()
-                .modeleAvionId(modeleAvionId)
+                .modeleAvionId(AvionApiControllerTest.MODELE_AVION_ID)
                 .compagnieId(compagnieId)
                 .build();
     }
@@ -71,7 +52,7 @@ public class AvionApiControllerTest {
     @Test
     void shouldCreateStatusForbidden() throws Exception {
         // Arrange
-        CreateOrUpdateAvionRequest request = buildRequest(MODELE_AVION_ID, "compagnie-id-1");
+        CreateOrUpdateAvionRequest request = buildRequest("compagnie-id-1");
 
         // Act
         ResultActions result = this.mockMvc.perform(
@@ -89,7 +70,7 @@ public class AvionApiControllerTest {
     @WithMockUser(roles = "VOL_MANAGER")
     void shouldCreateStatusCreated() throws Exception {
         // Arrange
-        CreateOrUpdateAvionRequest request = buildRequest(MODELE_AVION_ID, COMPAGNIE_ID);
+        CreateOrUpdateAvionRequest request = buildRequest(COMPAGNIE_ID);
 
         // Act
         ResultActions result = this.mockMvc.perform(
@@ -108,7 +89,7 @@ public class AvionApiControllerTest {
     @Test
     void shouldUpdateStatusForbidden() throws Exception {
         // Arrange
-        CreateOrUpdateAvionRequest request = buildRequest(MODELE_AVION_ID, "compagnie-id-1");
+        CreateOrUpdateAvionRequest request = buildRequest("compagnie-id-1");
 
         // Act
         ResultActions result = this.mockMvc.perform(
@@ -126,7 +107,7 @@ public class AvionApiControllerTest {
     @WithMockUser(roles = "VOL_MANAGER")
     void shouldUpdateStatusOk() throws Exception {
         // Arrange
-        CreateOrUpdateAvionRequest request = buildRequest(MODELE_AVION_ID, COMPAGNIE_ID);
+        CreateOrUpdateAvionRequest request = buildRequest(COMPAGNIE_ID);
 
         // Act
         ResultActions result = this.mockMvc.perform(
