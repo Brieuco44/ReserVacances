@@ -43,6 +43,25 @@ public class ModeleApiControllerIntegrationTest {
 
     // // CREATE
     @Test
+    void shouldCreateStatusBadRequest() throws Exception {
+        // given
+        CreateOrUpdateModeleVoitureRequest request = CreateOrUpdateModeleVoitureRequest.builder()
+                .nbPlace(5)
+                .marqueId(MARQUE_ID)
+                .build();
+
+        // when
+        ResultActions result = this.mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post(ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.json(request)));
+
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
     void shouldCreateStatusForbidden() throws Exception {
         // given
         CreateOrUpdateModeleVoitureRequest request = CreateOrUpdateModeleVoitureRequest.builder()

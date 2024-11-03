@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -42,6 +43,25 @@ public class MarqueApiControllerIntegrationTest {
     }
 
     // CREATE
+
+    @Test
+    void shouldCreateStatusBadRequest() throws Exception {
+        // given
+        CreateOrUpdateMarqueRequest request = CreateOrUpdateMarqueRequest.builder()
+                .villeId(VILLE_ID)
+                .build();
+
+        // when
+        ResultActions result = this.mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post(ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.json(request)));
+
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isBadRequest());
+    } 
+    
     @Test
     void shouldCreateStatusForbidden() throws Exception {
         // given

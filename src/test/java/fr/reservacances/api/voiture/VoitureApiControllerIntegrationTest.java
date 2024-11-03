@@ -42,6 +42,25 @@ public class VoitureApiControllerIntegrationTest {
 
     // // CREATE
     @Test
+    void shouldCreateStatusBadRequest() throws Exception {
+        // given
+        CreateOrUpdateVoitureRequest request = CreateOrUpdateVoitureRequest.builder()
+                .prix(150)
+                .modeleVoitureId(MODELE_ID)
+                .build();
+
+        // when
+        ResultActions result = this.mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post(ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.json(request)));
+
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
     void shouldCreateStatusForbidden() throws Exception {
         // given
         CreateOrUpdateVoitureRequest request = CreateOrUpdateVoitureRequest.builder()
