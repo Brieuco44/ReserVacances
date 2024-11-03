@@ -27,8 +27,8 @@ public class ReservationVoitureApiControllerIntegrationTest {
     private static final String ENDPOINT_ID = ENDPOINT + "/{id}";
 
     private static final String VOITURE_ID = "r8l8h9k6-9c4e-493c-9a1b-6d5b5c3h9i6j";
-    private static final String DATE_DEBUT = "2024-12-20 00:00:00";
-    private static final String DATE_FIN = "2024-12-30 23:59:59";
+    private static final String DATE_DEBUT = "2024-12-20T00:00:00";
+    private static final String DATE_FIN = "2024-12-30T23:59:59";
     private static final String RESERVATION_ID = "b2e15e7b-bf91-4118-9fc0-9b6d1c8fcadb";
     // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     // LocalDateTime dateDebut = LocalDateTime.parse("2024-12-20 00:00:00", formatter);
