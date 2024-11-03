@@ -52,17 +52,17 @@ public class JwtHeaderFilter extends OncePerRequestFilter {
                     authorities.add(new SimpleGrantedAuthority(constant.ROLE_USER));
                 }
 
-                if (optUser.get().getRole().getNom()==constant.ROLE_CAR_MANAGER) {
+                if (Objects.equals(optUser.get().getRole().getNom(), constant.ROLE_CAR_MANAGER)) {
                     authorities.add(new SimpleGrantedAuthority(constant.ROLE_CAR_MANAGER));
                     authorities.add(new SimpleGrantedAuthority(constant.ROLE_USER));
                 }
 
-                if (optUser.get().getRole().getNom()==constant.ROLE_HOTEL_MANAGER) {
+                if (Objects.equals(optUser.get().getRole().getNom(), constant.ROLE_HOTEL_MANAGER)) {
                     authorities.add(new SimpleGrantedAuthority(constant.ROLE_HOTEL_MANAGER));
                     authorities.add(new SimpleGrantedAuthority(constant.ROLE_USER));
                 }
 
-                if (optUser.get().getRole().getNom()==constant.ROLE_VOL_MANAGER) {
+                if (Objects.equals(optUser.get().getRole().getNom(), constant.ROLE_VOL_MANAGER)) {
                     authorities.add(new SimpleGrantedAuthority(constant.ROLE_VOL_MANAGER));
                     authorities.add(new SimpleGrantedAuthority(constant.ROLE_USER));
                 }
