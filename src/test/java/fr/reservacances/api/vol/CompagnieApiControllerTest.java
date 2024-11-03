@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -17,7 +16,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:/vol.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class CompagnieApiControllerTest {
 
     private static final String ENDPOINT = "/api/vol/compagnie";
@@ -29,9 +27,9 @@ public class CompagnieApiControllerTest {
     private MockMvc mockMvc;
 
     // Helper method to build request objects
-    private CreateOrUpdateCompagnieRequest buildRequest(String compagniName){
+    private CreateOrUpdateCompagnieRequest buildRequest(){
         CreateOrUpdateCompagnieRequest request = new CreateOrUpdateCompagnieRequest();
-        request.setNom(compagniName);
+        request.setNom("Ma compagnie");
         return request;
     }
 
@@ -51,7 +49,7 @@ public class CompagnieApiControllerTest {
     @Test
     void shouldCreateStatusForbidden() throws Exception {
         // Arrange
-        CreateOrUpdateCompagnieRequest request = buildRequest("Ma compagnie");
+        CreateOrUpdateCompagnieRequest request = buildRequest();
 
         // Act
         ResultActions result = this.mockMvc.perform(
@@ -69,7 +67,7 @@ public class CompagnieApiControllerTest {
     @WithMockUser(roles = "VOL_MANAGER")
     void shouldCreateStatusCreated() throws Exception {
         // Arrange
-        CreateOrUpdateCompagnieRequest request = buildRequest("Ma compagnie");
+        CreateOrUpdateCompagnieRequest request = buildRequest();
         // Act
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders
@@ -87,7 +85,7 @@ public class CompagnieApiControllerTest {
     @Test
     void shouldUpdateStatusForbidden() throws Exception {
         // Arrange
-        CreateOrUpdateCompagnieRequest request = buildRequest("Ma compagnie");
+        CreateOrUpdateCompagnieRequest request = buildRequest();
         // Act
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders
@@ -104,7 +102,7 @@ public class CompagnieApiControllerTest {
     @WithMockUser(roles = "VOL_MANAGER")
     void shouldUpdateStatusOk() throws Exception {
         // Arrange
-        CreateOrUpdateCompagnieRequest request = buildRequest("Ma compagnie");
+        CreateOrUpdateCompagnieRequest request = buildRequest();
         // Act
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders

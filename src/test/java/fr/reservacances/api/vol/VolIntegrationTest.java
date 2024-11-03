@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:/vol.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 class VolIntegrationTest {
 
     private static final String ENDPOINT = "/api/vol"; // Exemple d'endpoint, assurez-vous qu'il soit correct
