@@ -3,7 +3,6 @@ package fr.reservacances.api.vol;
 import fr.reservacances.exception.ErrorThrowException;
 import fr.reservacances.exception.vol.NotEnouthPlaceException;
 import fr.reservacances.model.utilisateur.Utilisateur;
-import fr.reservacances.model.vol.Aeroport;
 import fr.reservacances.model.vol.ModeleAvion;
 import fr.reservacances.model.vol.ReservationVol;
 import fr.reservacances.model.vol.Vol;

@@ -64,7 +64,7 @@ public class VoitureApiController {
 
     @GetMapping
     public List<VoitureResponse> findAll() {
-        log.debug("Finding all voitures ...");
+        log.debug("Recherche de toutes les voitures ...");
 
         return this.repository.findAll()
                 .stream()
@@ -75,7 +75,7 @@ public class VoitureApiController {
     @GetMapping("/available")
     public List<VoitureResponse> findAllAvailable(@RequestParam LocalDateTime dateDebut,
             @RequestParam LocalDateTime dateFin) {
-        log.debug("Finding all available voitures between {} and {}", dateDebut, dateFin);
+        log.debug("Recherche de voiture disponible entre le {} et le {}", dateDebut, dateFin);
 
         List<VoitureResponse> voituresResponses = this.repository.findAvailableVoitures(dateDebut, dateFin)
                 .stream()

@@ -1,7 +1,6 @@
 package fr.reservacances.api.utilisateur;
 
 import fr.reservacances.TestUtil;
-import fr.reservacances.api.utilisateur.UtilisateurApiController;
 import fr.reservacances.model.utilisateur.Utilisateur;
 import fr.reservacances.repository.utilisateur.UtilisateurRepository;
 import fr.reservacances.request.utilisateur.AuthRequest;

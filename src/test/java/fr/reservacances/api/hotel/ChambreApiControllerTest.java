@@ -79,7 +79,7 @@ public class ChambreApiControllerTest {
     void shouldCreateStatusCreated() throws Exception {
         // given
         CreateOrUpdateChambreRequest request = CreateOrUpdateChambreRequest.builder()
-                .numero("42")
+                .numero("101")
                 .prix(42)
                 .hotelId(HOTEL_ID)
                 .build();
@@ -99,7 +99,7 @@ public class ChambreApiControllerTest {
     void shouldCreateStatusRefused() throws Exception {
         // given
         CreateOrUpdateChambreRequest request = CreateOrUpdateChambreRequest.builder()
-                .numero("42")
+                .numero("101")
                 .hotelId(HOTEL_ID)
                 .build();
 
@@ -119,7 +119,7 @@ public class ChambreApiControllerTest {
     void shouldUpdateStatusOk() throws Exception {
         // given
         CreateOrUpdateChambreRequest request = CreateOrUpdateChambreRequest.builder()
-                .numero("42")
+                .numero("101")
                 .prix(42)
                 .hotelId(HOTEL_ID)
                 .build();
@@ -139,7 +139,7 @@ public class ChambreApiControllerTest {
     void shouldUpdateStatusRefused() throws Exception {
         // given
         CreateOrUpdateChambreRequest request = CreateOrUpdateChambreRequest.builder()
-                .numero("42")
+                .numero("101")
                 .hotelId(HOTEL_ID)
                 .build();
 
