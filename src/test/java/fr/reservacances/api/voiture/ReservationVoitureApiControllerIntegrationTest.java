@@ -61,6 +61,25 @@ public class ReservationVoitureApiControllerIntegrationTest {
 
         // // // CREATE
         @Test
+        void shouldCreateStatusBadRequest() throws Exception {
+                // given
+                CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
+                                .dateFin(LocalDateTime.parse("2024-12-30T23:59:59"))
+                                .voitureId(VOITURE_ID)
+                                .build();
+
+                // when
+                ResultActions result = this.mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post(ENDPOINT)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtil.json(request)));
+
+                // then
+                result.andExpect(MockMvcResultMatchers.status().isBadRequest());
+        }
+
+        @Test
         void shouldCreateStatusForbidden() throws Exception {
                 // given
                 CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
@@ -71,10 +90,10 @@ public class ReservationVoitureApiControllerIntegrationTest {
 
                 // when
                 ResultActions result = this.mockMvc.perform(
-                                MockMvcRequestBuilders
-                                                .post(ENDPOINT)
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .content(TestUtil.json(request)));
+                        MockMvcRequestBuilders
+                                .post(ENDPOINT)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtil.json(request)));
 
                 // then
                 result.andExpect(MockMvcResultMatchers.status().isForbidden());
@@ -85,10 +104,10 @@ public class ReservationVoitureApiControllerIntegrationTest {
         void shouldCreateStatusCreated() throws Exception {
                 // given
                 CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
-                                .dateDebut(LocalDateTime.of(2024, 10, 10, 1, 1, 1))
-                                .dateFin(LocalDateTime.of(2024, 10, 20, 1, 1, 1))
-                                .voitureId(VOITURE_ID)
-                                .build();
+                        .dateDebut(LocalDateTime.of(2024, 10, 10, 1, 1, 1))
+                        .dateFin(LocalDateTime.of(2024, 10, 20, 1, 1, 1))
+                        .voitureId(VOITURE_ID)
+                        .build();
 
                 // when
                 ResultActions result = this.mockMvc.perform(
@@ -106,17 +125,17 @@ public class ReservationVoitureApiControllerIntegrationTest {
         void shouldUpdateStatusForbidden() throws Exception {
                 // given
                 CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
-                                .dateDebut(LocalDateTime.parse("2024-12-15T00:00:00"))
-                                .dateFin(LocalDateTime.parse("2024-12-15T00:00:00"))
-                                .voitureId(VOITURE_ID)
-                                .build();
+                        .dateDebut(LocalDateTime.parse("2024-12-15T00:00:00"))
+                        .dateFin(LocalDateTime.parse("2024-12-15T00:00:00"))
+                        .voitureId(VOITURE_ID)
+                        .build();
 
                 // when
                 ResultActions result = this.mockMvc.perform(
-                                MockMvcRequestBuilders
-                                                .put(ENDPOINT_ID, RESERVATION_ID)
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .content(TestUtil.json(request)));
+                        MockMvcRequestBuilders
+                                .put(ENDPOINT_ID, RESERVATION_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtil.json(request)));
 
                 // then
                 result.andExpect(MockMvcResultMatchers.status().isForbidden());
