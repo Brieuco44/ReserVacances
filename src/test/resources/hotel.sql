@@ -1,19 +1,16 @@
-INSERT INTO reservacances.hotel (id, nom, ville_id)
-VALUES ('h1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f', 'Hôtel de Paris', 'cb227084-0bd5-4402-942f-169d00e0997b'), -- Paris
-       ('h1a2b3c4-5d6e-7f8g-9h0i-1j2k3l4m5n6o', 'The New Yorker', 'c63f4406-5485-47b7-a13c-443dea1de0bd'), -- New York
-       ('h1o2p3q4-5r6s-7t8u-9v0w-1x2y3z4a5b6c', 'Shinjuku Granbell Hotel',
-        '2e6d8f2b-4c1c-4bc3-ae63-7e06243a54b4'),                                                           -- Tokyo
-       ('h1z2a3b4-5c6d-7e8f-9g0h-1i2j3k4l5m6n', 'Hotel Berlin', '3c87c432-dc29-4abf-bbcb-b7cdb3a4d1b1'),   -- Berlin
-       ('h1m2n3o4-5p6q-7r8s-9t0u-1v2w3x4y5z6a', 'The Montcalm London',
-        '4bfa2c9e-1485-4a52-9c6c-88132fcd0496'),                                                           -- London
-       ('h1f2g3h4-5i6j-7k8l-9m0n-1o2p3q4r5s6t', 'Sydney Harbour Marriott',
-        'f16f8ef3-bb49-4e90-a6ee-02b3d4f2f0c8'),                                                           -- Sydney
-       ('h1u2v3w4-5x6y-7z8a-9b0c-1d2e3f4g5h6i', 'Hôtel Roma', 'ea0eaf12-30d2-4f61-9a04-b6342c4a1c42'),     -- Rome
-       ('h1j2k3l4-5m6n-7o8p-9q0r-1s2t3u4v5w6x', 'Hotel Madrid', 'c71f73bc-650c-43d5-a6ef-9167658eb5b9'),   -- Madrid
-       ('h1y2z3a4-5b6c-7d8e-9f0g-1h2i3j4k5l6m', 'Hotel Unique', '9e1cb3b0-8b8a-4489-8aa8-0b0a0b2aab5d'),   -- São Paulo
-       ('h1n2o3p4-5q6r-7s8t-9u0v-1w2x3y4z5a6b', 'Ararat Park Hyatt', '6632f78e-4a7b-4205-bc68-182ea25bc59b'); -- Moscow
+INSERT INTO hotel (id, nom, ville_id)
+VALUES ('h1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f', 'Hôtel de Paris', 'Paris'), -- Paris
+       ('h1a2b3c4-5d6e-7f8g-9h0i-1j2k3l4m5n6o', 'The New Yorker', 'New York'), -- New York
+       ('h1o2p3q4-5r6s-7t8u-9v0w-1x2y3z4a5b6c', 'Shinjuku Granbell Hotel', 'Tokyo'),   -- Tokyo
+       ('h1z2a3b4-5c6d-7e8f-9g0h-1i2j3k4l5m6n', 'Hotel Berlin', 'Berlin'),   -- Berlin
+       ('h1m2n3o4-5p6q-7r8s-9t0u-1v2w3x4y5z6a', 'The Montcalm London', 'London'),   -- London
+       ('h1f2g3h4-5i6j-7k8l-9m0n-1o2p3q4r5s6t', 'Sydney Harbour Marriott', 'Sydney'),  -- Sydney
+       ('h1u2v3w4-5x6y-7z8a-9b0c-1d2e3f4g5h6i', 'Hôtel Roma', 'Rome'),     -- Rome
+       ('h1j2k3l4-5m6n-7o8p-9q0r-1s2t3u4v5w6x', 'Hotel Madrid', 'Madrid'),   -- Madrid
+       ('h1y2z3a4-5b6c-7d8e-9f0g-1h2i3j4k5l6m', 'Hotel Unique', 'São Paulo'),   -- São Paulo
+       ('h1n2o3p4-5q6r-7s8t-9u0v-1w2x3y4z5a6b', 'Ararat Park Hyatt', 'Moscow'); -- Moscow
 
-INSERT INTO reservacances.chambre (id, nb_place, numero, prix, hotel_id)
+INSERT INTO chambre (id, nb_place, numero, prix, hotel_id)
 VALUES
     ('c1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f', 1, '101', 100.0, 'h1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f'),
     ('c1a2b3c4-5d6e-7f8g-9h0i-1j2k3l4m5n6o', 2, '102', 200.0, 'h1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f'),

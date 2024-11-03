@@ -69,7 +69,7 @@ public class HotelApiController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_HOTEL_MANAGER')")
     public String createHotel(@Valid @RequestBody CreateOrUpdateHotelRequest request) {
         Hotel hotel = new Hotel();
         Ville ville = this.villeRepository.findById(request.getVilleId()).orElseThrow(VilleNotFoundException::new);
@@ -83,7 +83,7 @@ public class HotelApiController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_HOTEL_MANAGER')")
     public String update(@PathVariable String id, @Valid @RequestBody CreateOrUpdateHotelRequest request) {
         log.debug("Modification Hotel {} ...", id);
 
@@ -99,7 +99,7 @@ public class HotelApiController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_HOTEL_MANAGER')")
     public void deleteById(@PathVariable String id) {
         log.debug("Suppression de l'hotel {} ...", id);
         try {
