@@ -8,19 +8,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import fr.reservacances.TestUtil;
+import fr.reservacances.annotation.WithMockUserId;
 import fr.reservacances.request.voiture.CreateOrUpdateReservationVoitureRequest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:/voiture.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class ReservationVoitureApiControllerIntegrationTest {
+
     private static final String ENDPOINT = "/api/reservation/voiture";
     private static final String ENDPOINT_ALL = ENDPOINT + "/all";
     private static final String ENDPOINT_ID = ENDPOINT + "/{id}";

@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -20,7 +19,6 @@ import fr.reservacances.request.hotel.CreateOrUpdateHotelRequest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:/hotel.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class HotelApiControllerTest {
 
     private static final String ENDPOINT = "/api/hotel";

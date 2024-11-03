@@ -18,10 +18,10 @@ public class CreateOrUpdateVolRequest {
     private LocalDateTime dateFin;
 
     @NotNull
-    private double prixAdulte;
+    private Double prixAdulte;
 
     @NotNull
-    private double prixEnfant;
+    private Double prixEnfant;
 
     @NotBlank
     private String aeroportDepartId;
@@ -31,4 +31,5 @@ public class CreateOrUpdateVolRequest {
 
     @NotBlank
     private String avionId;
+
 }

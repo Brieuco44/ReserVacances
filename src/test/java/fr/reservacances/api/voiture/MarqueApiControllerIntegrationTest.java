@@ -17,7 +17,6 @@ import fr.reservacances.request.voiture.CreateOrUpdateMarqueRequest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:/voiture.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class MarqueApiControllerIntegrationTest {
 
     private static final String ENDPOINT = "/api/marque";
@@ -44,6 +43,25 @@ public class MarqueApiControllerIntegrationTest {
     }
 
     // CREATE
+
+    @Test
+    void shouldCreateStatusBadRequest() throws Exception {
+        // given
+        CreateOrUpdateMarqueRequest request = CreateOrUpdateMarqueRequest.builder()
+                .villeId(VILLE_ID)
+                .build();
+
+        // when
+        ResultActions result = this.mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post(ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.json(request)));
+
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isBadRequest());
+    } 
+    
     @Test
     void shouldCreateStatusForbidden() throws Exception {
         // given

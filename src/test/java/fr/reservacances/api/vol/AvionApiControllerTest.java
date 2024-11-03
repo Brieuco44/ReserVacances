@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -17,7 +16,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:/vol.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class AvionApiControllerTest {
 
     private static final String ENDPOINT = "/api/vol/avion";
@@ -31,9 +29,9 @@ public class AvionApiControllerTest {
     private MockMvc mockMvc;
 
     // Helper method to build request objects
-    private CreateOrUpdateAvionRequest buildRequest(String modeleAvionId, String compagnieId) {
+    private CreateOrUpdateAvionRequest buildRequest(String compagnieId) {
         return CreateOrUpdateAvionRequest.builder()
-                .modeleAvionId(modeleAvionId)
+                .modeleAvionId(AvionApiControllerTest.MODELE_AVION_ID)
                 .compagnieId(compagnieId)
                 .build();
     }
@@ -54,7 +52,7 @@ public class AvionApiControllerTest {
     @Test
     void shouldCreateStatusForbidden() throws Exception {
         // Arrange
-        CreateOrUpdateAvionRequest request = buildRequest(MODELE_AVION_ID, "compagnie-id-1");
+        CreateOrUpdateAvionRequest request = buildRequest("compagnie-id-1");
 
         // Act
         ResultActions result = this.mockMvc.perform(
@@ -72,7 +70,7 @@ public class AvionApiControllerTest {
     @WithMockUser(roles = "VOL_MANAGER")
     void shouldCreateStatusCreated() throws Exception {
         // Arrange
-        CreateOrUpdateAvionRequest request = buildRequest(MODELE_AVION_ID, COMPAGNIE_ID);
+        CreateOrUpdateAvionRequest request = buildRequest(COMPAGNIE_ID);
 
         // Act
         ResultActions result = this.mockMvc.perform(
@@ -91,7 +89,7 @@ public class AvionApiControllerTest {
     @Test
     void shouldUpdateStatusForbidden() throws Exception {
         // Arrange
-        CreateOrUpdateAvionRequest request = buildRequest(MODELE_AVION_ID, "compagnie-id-1");
+        CreateOrUpdateAvionRequest request = buildRequest("compagnie-id-1");
 
         // Act
         ResultActions result = this.mockMvc.perform(
@@ -109,7 +107,7 @@ public class AvionApiControllerTest {
     @WithMockUser(roles = "VOL_MANAGER")
     void shouldUpdateStatusOk() throws Exception {
         // Arrange
-        CreateOrUpdateAvionRequest request = buildRequest(MODELE_AVION_ID, COMPAGNIE_ID);
+        CreateOrUpdateAvionRequest request = buildRequest(COMPAGNIE_ID);
 
         // Act
         ResultActions result = this.mockMvc.perform(

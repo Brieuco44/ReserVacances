@@ -128,6 +128,36 @@ public class VolApiController {
         }
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_VOL_MANAGER')")
+    public VolInfoResponse updateVol(@PathVariable String id, @Valid @RequestBody CreateOrUpdateVolRequest request) {
+        try {
+            Vol vol = new Vol();
+            BeanUtils.copyProperties(request, vol);
+
+            // Affectation des dates converties
+            vol.setDateDebut(request.getDateDebut());
+            vol.setDateFin(request.getDateFin());
+
+            Aeroport aeroportDepart = aeroportRepository.findById(request.getAeroportDepartId()).orElse(null);
+            Aeroport aeroportArrivee = aeroportRepository.findById(request.getAeroportArriveeId()).orElse(null);
+
+            vol.setAeroportDepart(aeroportDepart);
+            vol.setAeroportArrivee(aeroportArrivee);
+
+            Avion avion = avionRepository.findById(request.getAvionId()).orElse(null);
+            vol.setAvion(avion);
+
+            volRepository.save(vol);
+
+            return convertInfo(vol);
+        } catch (Exception e) {
+            log.error(e);
+            throw new ErrorThrowException();
+        }
+    }
+
 
 
     private VolInfoResponse convertInfo(Vol vol) {

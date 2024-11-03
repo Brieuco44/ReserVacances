@@ -18,20 +18,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateOrUpdateReservationVoitureRequest {
-  
-    @NotNull(message = "La date de début ne peut pas être nulle")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 
+    @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime dateDebut;
 
-    @NotNull(message = "La date de fin ne peut pas être nulle")
+    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime dateFin;
 
     @NotBlank
     public String voitureId;
-
-      // public String id;
-
-    // public String utilisateurId;
 }
+
