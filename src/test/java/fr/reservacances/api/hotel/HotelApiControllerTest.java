@@ -16,61 +16,58 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import fr.reservacances.TestUtil;
-import fr.reservacances.request.hotel.CreateOrUpdateChambreRequest;
-
+import fr.reservacances.request.hotel.CreateOrUpdateHotelRequest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "classpath:/hotel.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
-public class ChambreApiControllerTest {
+public class HotelApiControllerTest {
 
-    private static final String ENDPOINT = "/api/chambre";
+    private static final String ENDPOINT = "/api/hotel";
     private static final String ENDPOINT_ID = ENDPOINT + "/{id}";
-    private static final String ENDPOINT_HOTEL = "/api/chambre/hotel/{id}";
-    
-    private static final String CHAMBRE_ID = "c1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f";
+    private static final String ENDPOINT_VILLE = "/api/hotel/ville/{id}";
+
     private static final String HOTEL_ID = "h1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f";
 
-    
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void shouldFindAllChambreStatusOk() throws Exception {
+    void shouldFindAllHotelStatusOk() throws Exception {
         // when
         ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT));
-        
+
         // then
         result
-            .andExpect(status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
-            .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(29)));
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(10)));
 
     }
 
     @Test
-    void shouldFindChambreByIdStatusOk() throws Exception {
+    void shouldFindHotelByIdStatusOk() throws Exception {
         // when
-        ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_ID, CHAMBRE_ID));
-        
+        ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_ID, HOTEL_ID));
+
         // then
         result
-            .andExpect(status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("c1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.numero").value("101"));
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("h1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.nom").value("Hôtel de Paris"));
     }
 
     @Test
-    void shouldFindChambreByHotelStatusOk() throws Exception {
+    void shouldFindHotelByVilleStatusOk() throws Exception {
         // when
-        ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_HOTEL, "h1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f"));
-        
+        ResultActions result =
+        this.mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_VILLE, "Paris"));
+
         // then
         result.andExpect(status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
-            .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(11)))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value("c1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].numero").value("101"));
+        .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+        .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
+        .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value("h1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f"));
 
     }
 
@@ -78,10 +75,9 @@ public class ChambreApiControllerTest {
     @WithMockUser(roles = "HOTEL_MANAGER")
     void shouldCreateStatusCreated() throws Exception {
         // given
-        CreateOrUpdateChambreRequest request = CreateOrUpdateChambreRequest.builder()
-                .numero("42")
-                .prix(42)
-                .hotelId(HOTEL_ID)
+        CreateOrUpdateHotelRequest request = CreateOrUpdateHotelRequest.builder()
+                .nom("Le Grand Hôtel")
+                .villeId("Paris")
                 .build();
 
         // when
@@ -98,9 +94,9 @@ public class ChambreApiControllerTest {
     @Test
     void shouldCreateStatusRefused() throws Exception {
         // given
-        CreateOrUpdateChambreRequest request = CreateOrUpdateChambreRequest.builder()
-                .numero("42")
-                .hotelId(HOTEL_ID)
+        CreateOrUpdateHotelRequest request = CreateOrUpdateHotelRequest.builder()
+                .nom("Le Grand Hôtel")
+                .villeId("Paris")
                 .build();
 
         // when
@@ -118,16 +114,15 @@ public class ChambreApiControllerTest {
     @WithMockUser(roles = "HOTEL_MANAGER")
     void shouldUpdateStatusOk() throws Exception {
         // given
-        CreateOrUpdateChambreRequest request = CreateOrUpdateChambreRequest.builder()
-                .numero("42")
-                .prix(42)
-                .hotelId(HOTEL_ID)
+        CreateOrUpdateHotelRequest request = CreateOrUpdateHotelRequest.builder()
+                .nom("Les Grands Hôtels")
+                .villeId("Paris")
                 .build();
 
         // when
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders
-                        .put(ENDPOINT_ID, CHAMBRE_ID)
+                        .put(ENDPOINT_ID, HOTEL_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(TestUtil.json(request)));
 
@@ -138,15 +133,15 @@ public class ChambreApiControllerTest {
     @Test
     void shouldUpdateStatusRefused() throws Exception {
         // given
-        CreateOrUpdateChambreRequest request = CreateOrUpdateChambreRequest.builder()
-                .numero("42")
-                .hotelId(HOTEL_ID)
+        CreateOrUpdateHotelRequest request = CreateOrUpdateHotelRequest.builder()
+                .nom("Les Grands Hôtels")
+                .villeId("Paris")
                 .build();
 
         // when
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders
-                        .put(ENDPOINT_ID, CHAMBRE_ID)
+                        .put(ENDPOINT_ID, HOTEL_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(TestUtil.json(request)));
 
@@ -158,7 +153,7 @@ public class ChambreApiControllerTest {
     @WithMockUser(roles = "HOTEL_MANAGER")
     void shouldDeleteStatusOk() throws Exception {
         // when
-        ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.delete(ENDPOINT_ID, CHAMBRE_ID));
+        ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.delete(ENDPOINT_ID, HOTEL_ID));
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isOk());
@@ -167,7 +162,7 @@ public class ChambreApiControllerTest {
     @Test
     void shouldDeleteStatusRefused() throws Exception {
         // when
-        ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.delete(ENDPOINT_ID, CHAMBRE_ID));
+        ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.delete(ENDPOINT_ID, HOTEL_ID));
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isForbidden());

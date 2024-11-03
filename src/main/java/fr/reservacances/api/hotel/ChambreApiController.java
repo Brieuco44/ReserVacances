@@ -48,13 +48,17 @@ public class ChambreApiController {
     @GetMapping("/{id}")
     public ChambreResponse findById(@PathVariable String id) {
         log.debug("Recherche de la chambre {} ...", id);
+        try {
+            Chambre chambre = this.chambreRepository.findById(id).orElseThrow(ChambreNotFoundException::new);
+            ChambreResponse resp = ChambreResponse.builder().build();
 
-        Chambre chambre = this.chambreRepository.findById(id).orElseThrow(ChambreNotFoundException::new);
-        ChambreResponse resp = ChambreResponse.builder().build();
+            BeanUtils.copyProperties(chambre, resp);
+            return resp;
+        } catch (Exception ex) {
+            log.error("Chambre {} non trouvé !", id);
+            throw new ChambreNotFoundException();
+        }
 
-        BeanUtils.copyProperties(chambre, resp);
-
-        return resp;
     }
 
     @GetMapping("/hotel/{hotelId}")
@@ -68,7 +72,7 @@ public class ChambreApiController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_HOTEL_MANAGER')")
     public String createChambre(@Valid @RequestBody CreateOrUpdateChambreRequest request) {
         Chambre chambre = new Chambre();
         Hotel hotel = this.hotelRepository.findById(request.getHotelId()).orElseThrow(HotelNotFoundException::new);
@@ -82,7 +86,7 @@ public class ChambreApiController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_HOTEL_MANAGER')")
     public String update(@PathVariable String id, @Valid @RequestBody CreateOrUpdateChambreRequest request) {
         log.debug("Modification Chambre {} ...", id);
 
@@ -98,7 +102,7 @@ public class ChambreApiController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_HOTEL_MANAGER')")
     public void deleteById(@PathVariable String id) {
         log.debug("Suppression de la chambre {} ...", id);
 
