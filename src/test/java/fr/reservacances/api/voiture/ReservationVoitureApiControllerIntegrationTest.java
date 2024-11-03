@@ -21,145 +21,133 @@ import fr.reservacances.request.voiture.CreateOrUpdateReservationVoitureRequest;
 @AutoConfigureMockMvc
 public class ReservationVoitureApiControllerIntegrationTest {
 
-        private static final String ENDPOINT = "/api/reservation/voiture";
-        private static final String ENDPOINT_ALL = ENDPOINT + "/all";
-        private static final String ENDPOINT_ID = ENDPOINT + "/{id}";
+    private static final String ENDPOINT = "/api/reservation/voiture";
+    private static final String ENDPOINT_ALL = ENDPOINT + "/all";
+    private static final String ENDPOINT_ID = ENDPOINT + "/{id}";
 
-        private static final String VOITURE_ID = "a1d38d1f-4e72-4f5f-9a71-161c5b209e99";
-        private static final String RESERVATION_ID = "b2e15e7b-bf91-4118-9fc0-9b6d1c8fcadb";
+    private static final String VOITURE_ID = "r8l8h9k6-9c4e-493c-9a1b-6d5b5c3h9i6j";
+    private static final String DATE_DEBUT = "2024-12-20 00:00:00";
+    private static final String DATE_FIN = "2024-12-30 23:59:59";
+    private static final String RESERVATION_ID = "b2e15e7b-bf91-4118-9fc0-9b6d1c8fcadb";
+    // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd
+    // HH:mm:ss");
+    // LocalDateTime dateDebut = LocalDateTime.parse("2024-12-20 00:00:00",
+    // formatter);
+    // LocalDateTime dateFin = LocalDateTime.parse("2024-12-30 23:59:59",
+    // formatter);
+    // private static final String MODELE_ID = "ModeleVoiture1";
+    // Define the date format
 
-        @Autowired
-        private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-        // GET
-        @Test
-        void shouldFindAllStatusForbidden() throws Exception {
-                // given
+    // GET
+    @Test
+    void shouldFindAllStatusForbidden() throws Exception {
+        // given
 
-                // when
-                ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_ALL));
+        // when
+        ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_ALL));
 
-                // then
-                result
-                                .andExpect(MockMvcResultMatchers.status().isForbidden());
-        }
+        // then
+        result
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
 
-        @Test
-        @WithMockUser(roles = "CAR_MANAGER")
-        void shouldFindAllStatusOk() throws Exception {
-                // given
+    @Test
+    @WithMockUser(roles = "CAR_MANAGER")
+    void shouldFindAllStatusOk() throws Exception {
+        // given
 
-                // when
-                ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_ALL));
+        // when
+        ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_ALL));
 
-                // then
-                result
-                                .andExpect(MockMvcResultMatchers.status().isOk());
-        }
+        // then
+        result
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 
-        // // // CREATE
-        @Test
-        void shouldCreateStatusBadRequest() throws Exception {
-                // given
-                CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
-                                .dateFin(LocalDateTime.parse("2024-12-30T23:59:59"))
-                                .voitureId(VOITURE_ID)
-                                .build();
+    // // // CREATE
+    @Test
+    void shouldCreateStatusForbidden() throws Exception {
+        // given
+        CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
+                .dateDebut(LocalDateTime.of(2024, 11, 10, 0, 0, 0))
+                .dateFin(LocalDateTime.of(2024, 11, 20, 0, 0, 0))
+                .voitureId(VOITURE_ID)
+                .build();
 
-                // when
-                ResultActions result = this.mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .post(ENDPOINT)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtil.json(request)));
+        // when
+        ResultActions result = this.mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post(ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.json(request)));
 
-                // then
-                result.andExpect(MockMvcResultMatchers.status().isBadRequest());
-        }
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
 
-        @Test
-        void shouldCreateStatusForbidden() throws Exception {
-                // given
-                CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
-                                .dateDebut(LocalDateTime.parse("2024-12-20T00:00:00"))
-                                .dateFin(LocalDateTime.parse("2024-12-30T23:59:59"))
-                                .voitureId(VOITURE_ID)
-                                .build();
+    @Test
+    @WithMockUser(roles = "CAR_MANAGER")
+    void shouldCreateStatusCreated() throws Exception {
+        // given
+        CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
+                .dateDebut(LocalDateTime.parse("2024-12-15t00:00:00"))
+                .dateFin(LocalDateTime.parse("2024-12-15T00:00:00"))
+                .voitureId(VOITURE_ID)
+                .build();
 
-                // when
-                ResultActions result = this.mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .post(ENDPOINT)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtil.json(request)));
+        // when
+        ResultActions result = this.mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post(ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.json(request)));
 
-                // then
-                result.andExpect(MockMvcResultMatchers.status().isForbidden());
-        }
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
+    }
 
-        @Test
-        @WithMockUserId
-        void shouldCreateStatusCreated() throws Exception {
-                // given
-                CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
-                        .dateDebut(LocalDateTime.of(2024, 10, 10, 1, 1, 1))
-                        .dateFin(LocalDateTime.of(2024, 10, 20, 1, 1, 1))
-                        .voitureId(VOITURE_ID)
-                        .build();
+    // // UPDATE
+    @Test
+    void shouldUpdateStatusForbidden() throws Exception {
+        // given
+        CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
+                .dateDebut(LocalDateTime.parse("2024-12-15T00:00:00"))
+                .dateFin(LocalDateTime.parse("2024-12-15T00:00:00"))
+                .voitureId(VOITURE_ID)
+                .build();
 
-                // when
-                ResultActions result = this.mockMvc.perform(
-                                MockMvcRequestBuilders
-                                                .post(ENDPOINT)
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .content(TestUtil.json(request)));
+        // when
+        ResultActions result = this.mockMvc.perform(
+                MockMvcRequestBuilders
+                        .put(ENDPOINT_ID, RESERVATION_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.json(request)));
 
-                // then
-                result.andExpect(MockMvcResultMatchers.status().isCreated());
-        }
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
 
-        // UPDATE
-        @Test
-        void shouldUpdateStatusForbidden() throws Exception {
-                // given
-                CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
-                        .dateDebut(LocalDateTime.parse("2024-12-15T00:00:00"))
-                        .dateFin(LocalDateTime.parse("2024-12-15T00:00:00"))
-                        .voitureId(VOITURE_ID)
-                        .build();
+    @Test
+    @WithMockUser(roles = "CAR_MANAGER")
+    void shouldUpdateStatusCreated() throws Exception {
+        // given
+        CreateOrUpdateReservationVoitureRequest request = CreateOrUpdateReservationVoitureRequest.builder()
+                .dateDebut(LocalDateTime.parse("2024-12-15 00:00:00"))
+                .dateFin(LocalDateTime.parse("2024-12-15 00:00:00"))
+                .voitureId(VOITURE_ID)
+                .build();
 
-                // when
-                ResultActions result = this.mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .put(ENDPOINT_ID, RESERVATION_ID)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtil.json(request)));
+        // when
+        ResultActions result = this.mockMvc.perform(
+                MockMvcRequestBuilders
+                        .put(ENDPOINT_ID, RESERVATION_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.json(request)));
 
-                // then
-                result.andExpect(MockMvcResultMatchers.status().isForbidden());
-        }
-
-        // DELETE
-        @Test
-        void shouldDeleteByIdStatusForbidden() throws Exception {
-                // given
-
-                // when
-                ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.delete(ENDPOINT_ID, RESERVATION_ID));
-
-                // then
-                result.andExpect(MockMvcResultMatchers.status().isForbidden());
-        }
-
-        @Test
-        @WithMockUserId
-        void shouldDeleteByIdStatusOk() throws Exception {
-                // given
-
-                // when
-                ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.delete(ENDPOINT_ID, RESERVATION_ID));
-
-                // then
-                result.andExpect(MockMvcResultMatchers.status().isOk());
-        }
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }

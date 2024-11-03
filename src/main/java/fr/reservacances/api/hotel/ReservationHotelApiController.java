@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,16 +66,6 @@ public class ReservationHotelApiController {
         return resp;
     }
 
-    @GetMapping("/hotel/{hotelId}")
-    public List<ReservationHotelResponse> findByChambreId(@PathVariable String chambreId) {
-        log.debug("Recherche des reservations de la chambre {} ...", chambreId);
-        return this.reservationHotelRepository.findByChambreId(chambreId)
-
-                .stream()
-                .map(this::convert)
-                .toList();
-    }
-
     private ReservationHotelResponse convert(ReservationHotel reservationHotel) {
         ReservationHotelResponse resp = ReservationHotelResponse.builder().build();
         BeanUtils.copyProperties(reservationHotel, resp);
@@ -87,19 +78,19 @@ public class ReservationHotelApiController {
     public String create(@Valid @RequestBody CreateOrUpdateReservationHotelRequest request,
             Authentication authentication) {
         ReservationHotel reservationHotel = new ReservationHotel();
-        Utilisateur utilisateur = this.utilisateurRepository.findById(authentication.getPrincipal().toString())
+        Utilisateur utilisateur = this.utilisateurRepository
+                .findById((String) SecurityContextHolder.getContext().getAuthentication()
+                        .getPrincipal())
                 .orElseThrow(UtilisateurNotFoundException::new);
         Chambre chambre = this.chambreRepository.findById(request.getChambreId())
                 .orElseThrow(ChambreNotFoundException::new);
-        // List<ReservationHotel> reservationsExistantes = reservationHotelRepository.findReservationsByChambreAndDate(
-        //         request.getChambreId(),
-        //         request.getDateDebut(),
-        //         request.getDateFin());
-
-        // if (!reservationsExistantes.isEmpty()) {
-        //     return ResponseEntity.status(HttpStatus.CONFLICT)
-        //             .body("La chambre est déjà réservée pour la période sélectionnée.").toString();
-        // }
+        boolean reservationsDisponible = reservationHotelRepository.isChambreDisponible(
+                request.getChambreId(),
+                request.getDateDebut(),
+                request.getDateFin());
+        if (!reservationsDisponible) {
+            return "La chambre est déjà réservée pour la période sélectionnée.";
+        }
 
         BeanUtils.copyProperties(request, reservationHotel);
         reservationHotel.setUtilisateur(utilisateur);
@@ -122,15 +113,13 @@ public class ReservationHotelApiController {
                 .orElseThrow(ChambreNotFoundException::new);
         Utilisateur utilisateur = this.utilisateurRepository.findById(authentication.getPrincipal().toString())
                 .orElseThrow(UtilisateurNotFoundException::new);
-        // List<ReservationHotel> reservationsExistantes = reservationHotelRepository.findReservationsByChambreAndDate(
-        //         request.getChambreId(),
-        //         request.getDateDebut(),
-        //         request.getDateFin());
-
-        // if (!reservationsExistantes.isEmpty()) {
-        //     return ResponseEntity.status(HttpStatus.CONFLICT)
-        //             .body("La chambre est déjà réservée pour la période sélectionnée.").toString();
-        // }
+        boolean reservationsDisponible = reservationHotelRepository.isChambreDisponible(
+                request.getChambreId(),
+                request.getDateDebut(),
+                request.getDateFin());
+        if (!reservationsDisponible) {
+            return "La chambre est déjà réservée pour la période sélectionnée.";
+        }
 
         BeanUtils.copyProperties(request, reservationHotel);
         reservationHotel.setUtilisateur(utilisateur);
